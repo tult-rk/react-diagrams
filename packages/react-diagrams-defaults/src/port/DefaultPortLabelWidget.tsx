@@ -18,6 +18,15 @@ namespace S {
 	export const Label = styled.div`
 		padding: 0 5px;
 		flex-grow: 1;
+
+		input {
+			background-color: transparent;
+			border: none;
+			outline: none;
+			padding: 0 5px;
+			font-size: 14px;
+			color: white;
+		}
 	`;
 
 	export const Port = styled.div`
@@ -31,14 +40,50 @@ namespace S {
 	`;
 }
 
-export class DefaultPortLabel extends React.Component<DefaultPortLabelProps> {
+interface DefaultPortState {
+	portName: string;
+	inputWidth: string;
+}
+export class DefaultPortLabel extends React.Component<DefaultPortLabelProps, DefaultPortState> {
+	constructor(props: DefaultPortLabelProps) {
+		super(props);
+		this.state = {
+			portName: props.port.getOptions().name,
+			inputWidth: this.calculateInputWidth(props.port.getOptions().name)
+		};
+	}
+
+	calculateInputWidth = (value: string): string => {
+		// Estimate the width of the input based on the length of the text
+		// Adjust the multiplier (e.g., 8) based on your font size and padding
+		return (value.length + 1) * 8 + 'px';
+	};
+
+	handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+		const newName = event.target.value;
+		this.setState({
+			portName: newName,
+			inputWidth: this.calculateInputWidth(newName)
+		});
+		this.props.port.setLabel(newName);
+	};
+
 	render() {
 		const port = (
 			<PortWidget engine={this.props.engine} port={this.props.port}>
 				<S.Port />
 			</PortWidget>
 		);
-		const label = <S.Label>{this.props.port.getOptions().label}</S.Label>;
+		const label = (
+			<S.Label>
+				<input
+					type="text"
+					value={this.props.port.getOptions().label}
+					onChange={this.handleNameChange}
+					style={{ width: this.state.inputWidth }}
+				/>
+			</S.Label>
+		);
 
 		return (
 			<S.PortLabel>

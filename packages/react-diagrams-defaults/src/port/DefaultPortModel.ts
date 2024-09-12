@@ -66,6 +66,10 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 		return true;
 	}
 
+	setLabel(value: string): void {
+		this.options.label = value;
+	}
+
 	createLinkModel(factory?: AbstractModelFactory<LinkModel>): LinkModel {
 		let link = super.createLinkModel();
 		if (!link && factory) {

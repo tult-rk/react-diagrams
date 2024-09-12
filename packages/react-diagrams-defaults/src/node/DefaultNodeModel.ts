@@ -120,6 +120,10 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 		return this.portsIn;
 	}
 
+	setName(value: string) {
+		this.options.name = value;
+	}
+
 	getOutPorts(): DefaultPortModel[] {
 		return this.portsOut;
 	}
