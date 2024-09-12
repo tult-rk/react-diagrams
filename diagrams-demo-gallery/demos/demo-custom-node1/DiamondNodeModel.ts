@@ -6,9 +6,9 @@ export interface DiamondNodeModelGenerics {
 }
 
 export class DiamondNodeModel extends NodeModel<NodeModelGenerics & DiamondNodeModelGenerics> {
-	constructor() {
+	constructor(type: string = 'diamond') {
 		super({
-			type: 'diamond'
+			type: type
 		});
 		this.addPort(new DiamondPortModel(PortModelAlignment.TOP));
 		this.addPort(new DiamondPortModel(PortModelAlignment.LEFT));
