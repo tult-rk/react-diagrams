@@ -22,6 +22,10 @@ namespace S {
 		display: flex;
 		white-space: nowrap;
 		justify-items: center;
+		align-items: center;
+	`;
+	export const Icon = styled.div`
+		padding: 8px;
 	`;
 
 	export const TitleName = styled.div`
@@ -103,6 +107,7 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 				background={this.props.node.getOptions().color}
 			>
 				<S.Title>
+					{this.props.node.getOptions().icon && <S.Icon>{this.props.node.getOptions().icon}</S.Icon>}
 					<S.TitleName>
 						<input
 							type="text"

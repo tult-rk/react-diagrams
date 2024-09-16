@@ -18,6 +18,8 @@ namespace S {
 	export const Label = styled.div`
 		padding: 0 5px;
 		flex-grow: 1;
+		display: flex;
+		align-items: center;
 
 		input {
 			background-color: transparent;

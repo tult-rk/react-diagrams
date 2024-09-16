@@ -2,10 +2,12 @@ import _map from 'lodash/map';
 import { NodeModel, NodeModelGenerics, PortModelAlignment } from '@projectstorm/react-diagrams-core';
 import { DefaultPortModel } from '../port/DefaultPortModel';
 import { BasePositionModelOptions, DeserializeEvent } from '@projectstorm/react-canvas-core';
+import { ReactNode } from 'react';
 
 export interface DefaultNodeModelOptions extends BasePositionModelOptions {
 	name?: string;
 	color?: string;
+	icon?: ReactNode;
 }
 
 export interface DefaultNodeModelGenerics extends NodeModelGenerics {
@@ -16,13 +18,14 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 	protected portsIn: DefaultPortModel[];
 	protected portsOut: DefaultPortModel[];
 
-	constructor(name: string, color: string);
+	constructor(name: string, color: string, icon?: ReactNode);
 	constructor(options?: DefaultNodeModelOptions);
-	constructor(options: any = {}, color?: string) {
+	constructor(options: any = {}, color?: string, icon?: ReactNode) {
 		if (typeof options === 'string') {
 			options = {
 				name: options,
-				color: color
+				color: color,
+				icon: icon
 			};
 		}
 		super({

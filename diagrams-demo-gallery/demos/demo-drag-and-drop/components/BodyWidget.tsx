@@ -8,7 +8,7 @@ import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import { DemoCanvasWidget } from '../../helpers/DemoCanvasWidget';
 import styled from '@emotion/styled';
 import { DiamondNodeModel } from '../../demo-custom-node1/DiamondNodeModel';
-import { AiFillCaretRight } from 'react-icons/ai';
+import { RiStoreLine } from 'react-icons/ri';
 export interface BodyWidgetProps {
 	app: Application;
 }
@@ -66,7 +66,11 @@ export class BodyWidget extends React.Component<BodyWidgetProps> {
 
 							var node = null;
 							if (data.type === 'in') {
-								node = new DefaultNodeModel('Node ' + (nodesCount + 1), 'rgb(192,255,0)');
+								node = new DefaultNodeModel(
+									'Node ' + (nodesCount + 1),
+									'rgb(192,255,0)',
+									<RiStoreLine fontSize="large" />
+								);
 								node.addInPort('In');
 							} else if (customTypes.includes(data.type)) {
 								node = new DiamondNodeModel(data.type);

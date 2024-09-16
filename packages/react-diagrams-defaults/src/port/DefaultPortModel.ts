@@ -7,9 +7,11 @@ import {
 } from '@projectstorm/react-diagrams-core';
 import { DefaultLinkModel } from '../link/DefaultLinkModel';
 import { AbstractModelFactory, DeserializeEvent } from '@projectstorm/react-canvas-core';
+import { ReactNode } from 'react';
 
 export interface DefaultPortModelOptions extends PortModelOptions {
 	label?: string;
+	icon?: ReactNode;
 	in?: boolean;
 	type?: string;
 }
@@ -19,14 +21,15 @@ export interface DefaultPortModelGenerics extends PortModelGenerics {
 }
 
 export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
-	constructor(isIn: boolean, name?: string, label?: string);
+	constructor(isIn: boolean, name?: string, label?: string, icon?: ReactNode);
 	constructor(options: DefaultPortModelOptions);
-	constructor(options: DefaultPortModelOptions | boolean, name?: string, label?: string) {
+	constructor(options: DefaultPortModelOptions | boolean, name?: string, label?: string, icon?: ReactNode) {
 		if (!!name) {
 			options = {
 				in: !!options,
 				name: name,
-				label: label
+				label: label,
+				icon: icon
 			};
 		}
 		options = options as DefaultPortModelOptions;
