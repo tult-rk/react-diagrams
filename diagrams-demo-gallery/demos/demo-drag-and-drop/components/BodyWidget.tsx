@@ -3,7 +3,7 @@ import _keys from 'lodash/keys';
 import { TrayWidget } from './TrayWidget';
 import { Application, customTypes } from '../Application';
 import { TrayItemWidget } from './TrayItemWidget';
-import { DefaultNodeModel } from '@projectstorm/react-diagrams';
+import { DefaultNodeModel, NodeModel } from '@projectstorm/react-diagrams';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import { DemoCanvasWidget } from '../../helpers/DemoCanvasWidget';
 import styled from '@emotion/styled';
@@ -42,8 +42,45 @@ namespace S {
 		flex-grow: 1;
 	`;
 }
+interface State {
+	selected: any;
+}
+export class BodyWidget extends React.Component<BodyWidgetProps, State> {
+	constructor(props) {
+		super(props);
+		this.state = {
+			selected: null
+		};
+	}
+	componentDidMount() {
+		// Register listener for selection on the model
+		this.props.app
+			.getDiagramEngine()
+			.getModel()
+			.getNodes()
+			.forEach((node) => {
+				node.registerListener({
+					eventDidFire: (event) => {
+						this.setState({ selected: event });
+					}
+				});
+			});
+	}
+	componentDidUpdate() {
+		// Register listener for selection on the model
+		this.props.app
+			.getDiagramEngine()
+			.getModel()
+			.getNodes()
+			.forEach((node) => {
+				node.registerListener({
+					eventDidFire: (event) => {
+						this.setState({ selected: event });
+					}
+				});
+			});
+	}
 
-export class BodyWidget extends React.Component<BodyWidgetProps> {
 	render() {
 		return (
 			<S.Body>
@@ -95,6 +132,53 @@ export class BodyWidget extends React.Component<BodyWidgetProps> {
 							<CanvasWidget engine={this.props.app.getDiagramEngine()} />
 						</DemoCanvasWidget>
 					</S.Layer>
+
+					{this.state.selected && (
+						<TrayWidget>
+							<button onClick={() => this.setState({ selected: null })}>Close</button>
+							<div style={{ color: 'white' }}>Name: {this.state.selected.entity?.options?.name}</div>
+							<div style={{ color: 'white', display: 'flex', alignItems: 'center' }}>
+								Color:
+								<div
+									style={{
+										width: 10,
+										height: 10,
+										margin: '0 5px',
+										backgroundColor: this.state.selected.entity?.options?.color
+									}}
+								></div>
+							</div>
+							<div style={{ color: 'white' }}>Height: {this.state.selected.entity?.height}</div>
+							<div style={{ color: 'white' }}>Width: {this.state.selected.entity?.width}</div>
+
+							{this.state.selected.entity?.portsIn?.length ? (
+								<>
+									<div style={{ color: 'white' }}>Port In</div>
+									{this.state.selected.entity?.portsIn.map((port) => (
+										<div>
+											<div style={{ color: 'white' }}>Name: {port.options.label}</div>
+										</div>
+									))}
+								</>
+							) : (
+								<></>
+							)}
+
+							{this.state.selected.entity?.portsOut?.length ? (
+								<>
+									<div style={{ color: 'white' }}>Port Out</div>
+
+									{this.state.selected.entity?.portsOut.map((port) => (
+										<div>
+											<div style={{ color: 'white' }}>Name: {port.options.label}</div>
+										</div>
+									))}
+								</>
+							) : (
+								<></>
+							)}
+						</TrayWidget>
+					)}
 				</S.Content>
 			</S.Body>
 		);
