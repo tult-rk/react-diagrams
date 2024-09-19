@@ -9,6 +9,7 @@ import { DemoCanvasWidget } from '../../helpers/DemoCanvasWidget';
 import styled from '@emotion/styled';
 import { DiamondNodeModel } from '../../demo-custom-node1/DiamondNodeModel';
 import { RiStoreLine } from 'react-icons/ri';
+import { PropertiesTray } from './PropertiesTray';
 export interface BodyWidgetProps {
 	app: Application;
 }
@@ -80,6 +81,9 @@ export class BodyWidget extends React.Component<BodyWidgetProps, State> {
 				});
 			});
 	}
+	update() {
+		this.forceUpdate();
+	}
 
 	render() {
 		return (
@@ -116,7 +120,11 @@ export class BodyWidget extends React.Component<BodyWidgetProps, State> {
 								node.addInPort('In');
 								node.addOutPort('Out');
 							} else {
-								node = new DefaultNodeModel('Node ' + (nodesCount + 1), 'rgb(0,192,255)');
+								node = new DefaultNodeModel(
+									'Node ' + (nodesCount + 1),
+									'rgb(0,192,255)',
+									<RiStoreLine fontSize="large" />
+								);
 								node.addOutPort('Out');
 							}
 							var point = this.props.app.getDiagramEngine().getRelativeMousePoint(event);
@@ -135,48 +143,14 @@ export class BodyWidget extends React.Component<BodyWidgetProps, State> {
 
 					{this.state.selected && (
 						<TrayWidget>
-							<button onClick={() => this.setState({ selected: null })}>Close</button>
-							<div style={{ color: 'white' }}>Name: {this.state.selected.entity?.options?.name}</div>
-							<div style={{ color: 'white', display: 'flex', alignItems: 'center' }}>
-								Color:
-								<div
-									style={{
-										width: 10,
-										height: 10,
-										margin: '0 5px',
-										backgroundColor: this.state.selected.entity?.options?.color
-									}}
-								></div>
-							</div>
-							<div style={{ color: 'white' }}>Height: {this.state.selected.entity?.height}</div>
-							<div style={{ color: 'white' }}>Width: {this.state.selected.entity?.width}</div>
-
-							{this.state.selected.entity?.portsIn?.length ? (
-								<>
-									<div style={{ color: 'white' }}>Port In</div>
-									{this.state.selected.entity?.portsIn.map((port) => (
-										<div>
-											<div style={{ color: 'white' }}>Name: {port.options.label}</div>
-										</div>
-									))}
-								</>
-							) : (
-								<></>
-							)}
-
-							{this.state.selected.entity?.portsOut?.length ? (
-								<>
-									<div style={{ color: 'white' }}>Port Out</div>
-
-									{this.state.selected.entity?.portsOut.map((port) => (
-										<div>
-											<div style={{ color: 'white' }}>Name: {port.options.label}</div>
-										</div>
-									))}
-								</>
-							) : (
-								<></>
-							)}
+							<PropertiesTray
+								element={this.state.selected}
+								engine={this.props.app.getDiagramEngine()}
+								onClose={() => {
+									this.props.app.getDiagramEngine().getModel().clearSelection();
+									this.setState({ selected: null });
+								}}
+							/>
 						</TrayWidget>
 					)}
 				</S.Content>

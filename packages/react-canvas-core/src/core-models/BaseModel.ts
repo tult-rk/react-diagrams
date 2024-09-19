@@ -18,6 +18,7 @@ export interface BaseModelOptions extends BaseEntityOptions {
 	type?: string;
 	selected?: boolean;
 	extras?: any;
+	edited?: boolean;
 }
 
 export interface BaseModelGenerics extends BaseEntityGenerics {
@@ -66,7 +67,8 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
 			...super.serialize(),
 			type: this.options.type,
 			selected: this.options.selected,
-			extras: this.options.extras
+			extras: this.options.extras,
+			edited: this.options.edited
 		};
 	}
 
@@ -82,6 +84,14 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
 
 	isSelected(): boolean {
 		return this.options.selected;
+	}
+
+	isEdited(): boolean {
+		return this.options.edited;
+	}
+
+	setEdited(edited): void {
+		return (this.options.edited = edited);
 	}
 
 	isLocked(): boolean {
