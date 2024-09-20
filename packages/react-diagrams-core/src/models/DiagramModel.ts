@@ -146,9 +146,7 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 
 	removeNode(node: NodeModel) {
 		const removed = _some(this.getNodeLayers(), (layer) => {
-			if (!node.isEdited) {
-				return layer.removeModel(node);
-			}
+			return layer.removeModel(node);
 		});
 		if (removed) {
 			this.fireEvent({ node, isCreated: false }, 'nodesUpdated');

@@ -1,22 +1,50 @@
+import * as SRD from '@projectstorm/react-diagrams';
 import { DefaultNodeModel } from '@projectstorm/react-diagrams-defaults';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-export const PropertiesTray = ({ engine, element, onClose }) => {
-	const [node, setNode] = useState<DefaultNodeModel>(null);
+interface Props {
+	engine: SRD.DiagramEngine;
+	element: any;
+	onClose: () => void;
+}
 
-	console.log(node);
-	const reset = () => {};
+export const PropertiesTray = ({ engine, element, onClose }: Props) => {
+	const model = engine.getModel();
+	const [node, setNode] = useState(null);
+
+	useEffect(() => {
+		if (!engine) {
+			return;
+		}
+		const item = engine.getModel().getNode(element?.entity?.options?.id);
+		setNode(item);
+	}, [element?.entity?.options?.id]);
+
+	const handleChangeName = (value) => {
+		node.setName(value);
+		engine.repaintCanvas();
+	};
+
+	const onFocus = useCallback(() => {
+		model.setEdited(true);
+	}, [model]);
+
+	const onBlur = useCallback(() => {
+		model.setEdited(false);
+	}, [model]);
 
 	return (
 		<>
 			<button onClick={onClose}>Close</button>
-			<div style={{ color: 'white' }}>Name: {element?.entity?.options?.name}</div>
+			<div style={{ color: 'white' }}>Name: </div>
 
 			<input
-				defaultValue={element?.entity?.options?.name}
+				defaultValue={node?.options?.name}
 				onChange={(e) => {
-					node.setName(e.target.value);
+					handleChangeName(e.target.value);
 				}}
+				onBlur={onBlur}
+				onFocus={onFocus}
 			/>
 			<div style={{ color: 'white', display: 'flex', alignItems: 'center' }}>
 				Color:
