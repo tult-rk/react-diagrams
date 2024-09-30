@@ -22,11 +22,23 @@ namespace S {
 		display: flex;
 		white-space: nowrap;
 		justify-items: center;
+		align-items: center;
+	`;
+	export const Icon = styled.div`
+		padding: 8px;
 	`;
 
 	export const TitleName = styled.div`
 		flex-grow: 1;
 		padding: 5px 5px;
+		input {
+			background-color: transparent;
+			border: none;
+			outline: none;
+			padding: 0 5px;
+			font-size: 14px;
+			color: white;
+		}
 	`;
 
 	export const Ports = styled.div`
@@ -54,12 +66,36 @@ export interface DefaultNodeProps {
 	engine: DiagramEngine;
 }
 
-/**
- * Default node that models the DefaultNodeModel. It creates two columns
- * for both all the input ports on the left, and the output ports on the right.
- */
-export class DefaultNodeWidget extends React.Component<DefaultNodeProps> {
-	generatePort = (port) => {
+interface DefaultNodeState {
+	nodeName: string;
+	inputWidth: string;
+}
+
+export class DefaultNodeWidget extends React.Component<DefaultNodeProps, DefaultNodeState> {
+	constructor(props: DefaultNodeProps) {
+		super(props);
+		this.state = {
+			nodeName: props.node.getOptions().name,
+			inputWidth: this.calculateInputWidth(props.node.getOptions().name)
+		};
+	}
+
+	calculateInputWidth = (value: string): string => {
+		// Estimate the width of the input based on the length of the text
+		// Adjust the multiplier (e.g., 8) based on your font size and padding
+		return (value.length + 1) * 8 + 'px';
+	};
+
+	handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+		const newName = event.target.value;
+		this.setState({
+			nodeName: newName,
+			inputWidth: this.calculateInputWidth(newName)
+		});
+		this.props.node.setName(newName);
+	};
+
+	generatePort = (port: any): JSX.Element => {
 		return <DefaultPortLabel engine={this.props.engine} port={port} key={port.getID()} />;
 	};
 
@@ -71,7 +107,15 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps> {
 				background={this.props.node.getOptions().color}
 			>
 				<S.Title>
-					<S.TitleName>{this.props.node.getOptions().name}</S.TitleName>
+					{this.props.node.getOptions().icon && <S.Icon>{this.props.node.getOptions().icon}</S.Icon>}
+					<S.TitleName>
+						<input
+							type="text"
+							value={this.props.node.getOptions().name}
+							onChange={this.handleNameChange}
+							style={{ width: this.state.inputWidth }}
+						/>
+					</S.TitleName>
 				</S.Title>
 				<S.Ports>
 					<S.PortsContainer>{_map(this.props.node.getInPorts(), this.generatePort)}</S.PortsContainer>

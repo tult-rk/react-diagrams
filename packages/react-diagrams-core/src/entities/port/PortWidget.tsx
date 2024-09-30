@@ -47,7 +47,7 @@ export class PortWidget extends React.Component<React.PropsWithChildren<PortProp
 
 	getExtraProps() {
 		if (Toolkit.TESTING) {
-			const links = _keys(this.props.port.getNode().getPort(this.props.port.getName()).links).join(',');
+			const links = _keys(this.props.port.getNode().getPort(this.props.port.getName())?.links).join(',');
 			return {
 				'data-links': links
 			};
@@ -61,7 +61,7 @@ export class PortWidget extends React.Component<React.PropsWithChildren<PortProp
 				style={this.props.style}
 				ref={this.ref}
 				className={`port ${this.props.className || ''}`}
-				data-name={this.props.port.getName()}
+				data-name={this.props.port.getID()}
 				data-nodeid={this.props.port.getNode().getID()}
 				{...this.getExtraProps()}
 			>

@@ -5,6 +5,7 @@ export interface TrayItemWidgetProps {
 	model: any;
 	color?: string;
 	name: string;
+	icon?: any;
 }
 
 namespace S {

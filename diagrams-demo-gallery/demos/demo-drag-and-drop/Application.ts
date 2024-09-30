@@ -1,8 +1,11 @@
 import * as SRD from '@projectstorm/react-diagrams';
+import { DiamondNodeFactory } from '../demo-custom-node1/DiamondNodeFactory';
 
 /**
  * @author Dylan Vorster
  */
+
+export const customTypes = ['diamond', 'circle', 'ellipse'];
 export class Application {
 	protected activeModel: SRD.DiagramModel;
 	protected diagramEngine: SRD.DiagramEngine;
@@ -15,6 +18,9 @@ export class Application {
 	public newModel() {
 		this.activeModel = new SRD.DiagramModel();
 		this.diagramEngine.setModel(this.activeModel);
+		customTypes.map((type) => {
+			this.diagramEngine.getNodeFactories().registerFactory(new DiamondNodeFactory(type));
+		});
 
 		//3-A) create a default node
 		var node1 = new SRD.DefaultNodeModel('Node 1', 'rgb(0,192,255)');

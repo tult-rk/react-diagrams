@@ -38,7 +38,7 @@ export interface CanvasModelGenerics extends BaseEntityGenerics {
 
 export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> extends BaseEntity<G> {
 	protected layers: G['LAYER'][];
-
+	protected edited;
 	constructor(options: G['OPTIONS'] = {}) {
 		super({
 			zoom: 100,
@@ -48,6 +48,7 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 			...options
 		});
 		this.layers = [];
+		this.edited = false;
 	}
 
 	getSelectionEntities(): BaseModel[] {
@@ -72,6 +73,14 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 		return _flatMap(this.layers, (layer) => {
 			return _values(layer.getModels());
 		});
+	}
+
+	setEdited(value: boolean) {
+		this.edited = value;
+	}
+
+	getEdited(): boolean {
+		return this.edited;
 	}
 
 	addLayer(layer: LayerModel) {
