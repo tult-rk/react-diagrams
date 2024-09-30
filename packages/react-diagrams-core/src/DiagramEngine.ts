@@ -153,7 +153,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 
 	getNodePortElement(port: PortModel): any {
 		var selector = this.canvas.querySelector(
-			`.port[data-name="${port.getName()}"][data-nodeid="${port.getParent().getID()}"]`
+			`.port[data-name="${port.getID()}"][data-nodeid="${port.getParent().getID()}"]`
 		);
 		if (selector === null) {
 			throw new Error(
