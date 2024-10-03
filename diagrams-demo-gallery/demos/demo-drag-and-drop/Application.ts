@@ -13,6 +13,10 @@ export class Application {
 	constructor() {
 		this.diagramEngine = SRD.default();
 		this.newModel();
+		const state = this.diagramEngine.getStateMachine().getCurrentState();
+		if (state instanceof SRD.DefaultDiagramState) {
+			state.dragNewLink.config.allowLooseLinks = false;
+		}
 	}
 
 	public newModel() {
