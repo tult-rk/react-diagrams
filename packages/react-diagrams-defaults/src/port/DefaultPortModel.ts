@@ -63,10 +63,31 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 	}
 
 	canLinkToPort(port: PortModel): boolean {
-		if (port instanceof DefaultPortModel) {
-			return this.options.in !== port.getOptions().in;
+		const links = Object.values(port.getLinks());
+		let canConnect = true;
+
+		if (this.getID() !== port.getID()) {
+			canConnect = true;
 		}
-		return true;
+
+		if (links.length === 0) {
+			canConnect = true;
+		} else {
+			links.forEach((link) => {
+				const targetPort = link.getTargetPort();
+				const sourcePort = link.getSourcePort();
+				if (
+					(targetPort?.getID() === port?.getID() && sourcePort?.getID() === this?.getID()) ||
+					(sourcePort?.getID() === port?.getID() && targetPort?.getID() === this?.getID())
+				) {
+					canConnect = false;
+				}
+				if (!targetPort) {
+					canConnect = false;
+				}
+			});
+		}
+		return canConnect;
 	}
 
 	setLabel(value: string): void {

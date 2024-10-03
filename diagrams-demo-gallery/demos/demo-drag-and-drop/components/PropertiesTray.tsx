@@ -114,7 +114,7 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 		},
 		[element, node?.getPorts(), model.getEdited()]
 	);
-	console.log('===========================123123123', node?.getPorts());
+
 	return (
 		<>
 			<button onClick={onClose}>Close</button>
