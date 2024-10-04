@@ -1,4 +1,4 @@
-import { Rectangle } from '@projectstorm/geometry';
+import { Rectangle } from '@fjdr/geometry';
 
 export interface ModelGeometryInterface {
 	getBoundingBox(): Rectangle;

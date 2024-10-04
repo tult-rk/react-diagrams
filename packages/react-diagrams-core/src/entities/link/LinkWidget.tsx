@@ -4,7 +4,7 @@ import { LinkModel } from './LinkModel';
 import { PointModel } from './PointModel';
 import _map from 'lodash/map';
 import { LabelWidget } from '../label/LabelWidget';
-import { BaseEntityEvent, BasePositionModel, ListenerHandle, PeformanceWidget } from '@projectstorm/react-canvas-core';
+import { BaseEntityEvent, BasePositionModel, ListenerHandle, PeformanceWidget } from '@fjdr/react-canvas-core';
 import { PortModel } from '../port/PortModel';
 
 export interface LinkProps {

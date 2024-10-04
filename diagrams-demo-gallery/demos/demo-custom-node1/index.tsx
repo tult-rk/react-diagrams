@@ -1,11 +1,11 @@
-import createEngine, { DefaultNodeModel, DiagramModel, PortModelAlignment } from '@projectstorm/react-diagrams';
+import createEngine, { DefaultNodeModel, DiagramModel, PortModelAlignment } from '@fjdr/react-diagrams';
 import * as React from 'react';
 // import the custom models
 import { DiamondNodeModel } from './DiamondNodeModel';
 import { DiamondNodeFactory } from './DiamondNodeFactory';
 import { SimplePortFactory } from './SimplePortFactory';
 import { DiamondPortModel } from './DiamondPortModel';
-import { CanvasWidget } from '@projectstorm/react-canvas-core';
+import { CanvasWidget } from '@fjdr/react-canvas-core';
 import { DemoCanvasWidget } from '../helpers/DemoCanvasWidget';
 
 /**

@@ -1,11 +1,11 @@
 {
-	"name": "@projectstorm/react-diagrams",
-	"version": "7.0.4",
-	"author": "dylanvorster",
+	"name": "@fjdr/react-diagrams",
+	"version": "1.0.0",
+	"author": "thanhdv98",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/projectstorm/react-diagrams.git"
+		"url": "https://github.com/tult-rk/react-diagrams.git"
 	},
 	"scripts": {
 		"clean": "rimraf ./dist",
@@ -29,9 +29,9 @@
 	"module": "./dist/index.js",
 	"typings": "./dist/@types/index",
 	"dependencies": {
-		"@projectstorm/react-canvas-core": "workspace:*",
-		"@projectstorm/react-diagrams-core": "workspace:*",
-		"@projectstorm/react-diagrams-defaults": "workspace:*",
-		"@projectstorm/react-diagrams-routing": "workspace:*"
+		"@fjdr/react-canvas-core": "workspace:*",
+		"@fjdr/react-diagrams-core": "workspace:*",
+		"@fjdr/react-diagrams-defaults": "workspace:*",
+		"@fjdr/react-diagrams-routing": "workspace:*"
 	}
 }

@@ -2,20 +2,14 @@
 
 ## Using Typescript
 
-If you are using typescript, then you are in luck! The library is built in typescript, and includes advanced types for everything you need right out of the box. 
+If you are using typescript, then you are in luck! The library is built in typescript, and includes advanced types for everything you need right out of the box.
 
 Lets start by including the things we are going to need:
 
 ```typescript
-import createEngine, { 
-    DefaultLinkModel, 
-    DefaultNodeModel,
-    DiagramModel 
-} from '@projectstorm/react-diagrams';
+import createEngine, { DefaultLinkModel, DefaultNodeModel, DiagramModel } from '@fjdr/react-diagrams';
 
-import {
-    CanvasWidget
-} from '@projectstorm/react-canvas-core';
+import { CanvasWidget } from '@fjdr/react-canvas-core';
 ```
 
 Now we call `createEngine` which will bootstrap a **DiagramEngine** for us that contains all the defaults setup.
@@ -31,7 +25,7 @@ Next, we create two nodes:
 // node 1
 const node1 = new DefaultNodeModel({
 	name: 'Node 1',
-	color: 'rgb(0,192,255)',
+	color: 'rgb(0,192,255)'
 });
 node1.setPosition(100, 100);
 let port1 = node1.addOutPort('Out');
@@ -39,7 +33,7 @@ let port1 = node1.addOutPort('Out');
 // node 2
 const node2 = new DefaultNodeModel({
 	name: 'Node 1',
-	color: 'rgb(0,192,255)',
+	color: 'rgb(0,192,255)'
 });
 node2.setPosition(100, 100);
 let port2 = node2.addOutPort('Out');

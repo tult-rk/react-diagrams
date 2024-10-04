@@ -2,7 +2,7 @@ import { NodeModel } from './entities/node/NodeModel';
 import { PortModel } from './entities/port/PortModel';
 import { LinkModel } from './entities/link/LinkModel';
 import { LabelModel } from './entities/label/LabelModel';
-import { boundingBoxFromPolygons, Point, Rectangle } from '@projectstorm/geometry';
+import { boundingBoxFromPolygons, Point, Rectangle } from '@fjdr/geometry';
 import { MouseEvent } from 'react';
 import {
 	AbstractModelFactory,
@@ -13,7 +13,7 @@ import {
 	CanvasEngineOptions,
 	FactoryBank,
 	Toolkit
-} from '@projectstorm/react-canvas-core';
+} from '@fjdr/react-canvas-core';
 import { DiagramModel } from './models/DiagramModel';
 
 /**

@@ -1,4 +1,4 @@
-# @projectstorm/react-diagrams-gallery
+# @fjdr/react-diagrams-gallery
 
 ## 7.2.1
 
@@ -18,10 +18,10 @@
 - Updated dependencies [09ed60f]
 - Updated dependencies [20766f5]
 - Updated dependencies [80285fe]
-  - @projectstorm/react-canvas-core@7.0.3
-  - @projectstorm/react-diagrams-core@7.0.3
-  - @projectstorm/react-diagrams-defaults@7.1.3
-  - @projectstorm/react-diagrams@7.0.4
+  - @fjdr/react-canvas-core@7.0.3
+  - @fjdr/react-diagrams-core@7.0.3
+  - @fjdr/react-diagrams-defaults@7.1.3
+  - @fjdr/react-diagrams@7.0.4
 
 ## 7.1.2
 
@@ -29,10 +29,10 @@
 
 - 66c687a: Upgrade all dependencies and fix Storybook after upgrade
 - Updated dependencies [66c687a]
-  - @projectstorm/react-diagrams-defaults@7.1.2
-  - @projectstorm/react-diagrams-core@7.0.2
-  - @projectstorm/react-canvas-core@7.0.2
-  - @projectstorm/react-diagrams@7.0.3
+  - @fjdr/react-diagrams-defaults@7.1.2
+  - @fjdr/react-diagrams-core@7.0.2
+  - @fjdr/react-canvas-core@7.0.2
+  - @fjdr/react-diagrams@7.0.3
 
 ## 7.1.1
 
@@ -40,10 +40,10 @@
 
 - b8a4cbd: Inline sources in sourcemap
 - Updated dependencies [b8a4cbd]
-  - @projectstorm/react-canvas-core@7.0.1
-  - @projectstorm/react-diagrams@7.0.2
-  - @projectstorm/react-diagrams-core@7.0.1
-  - @projectstorm/react-diagrams-defaults@7.1.1
+  - @fjdr/react-canvas-core@7.0.1
+  - @fjdr/react-diagrams@7.0.2
+  - @fjdr/react-diagrams-core@7.0.1
+  - @fjdr/react-diagrams-defaults@7.1.1
 
 ## 7.1.0
 
@@ -58,8 +58,8 @@
 ### Patch Changes
 
 - Updated dependencies [e0d21f1]
-  - @projectstorm/react-diagrams-defaults@7.1.0
-  - @projectstorm/react-diagrams@7.0.1
+  - @fjdr/react-diagrams-defaults@7.1.0
+  - @fjdr/react-diagrams@7.0.1
 
 ## 7.0.0
 
@@ -87,7 +87,7 @@
 ### Patch Changes
 
 - Updated dependencies [b051697]
-  - @projectstorm/react-diagrams-defaults@7.0.0
-  - @projectstorm/react-diagrams-core@7.0.0
-  - @projectstorm/react-canvas-core@7.0.0
-  - @projectstorm/react-diagrams@7.0.0
+  - @fjdr/react-diagrams-defaults@7.0.0
+  - @fjdr/react-diagrams-core@7.0.0
+  - @fjdr/react-canvas-core@7.0.0
+  - @fjdr/react-diagrams@7.0.0

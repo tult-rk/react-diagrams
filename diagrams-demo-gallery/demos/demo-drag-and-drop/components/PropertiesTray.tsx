@@ -1,5 +1,5 @@
-import * as SRD from '@projectstorm/react-diagrams';
-import { DefaultNodeModel, DefaultPortModel } from '@projectstorm/react-diagrams-defaults';
+import * as SRD from '@fjdr/react-diagrams';
+import { DefaultNodeModel, DefaultPortModel } from '@fjdr/react-diagrams-defaults';
 import { randomUUID } from 'crypto';
 import React, { useCallback, useEffect, useState } from 'react';
 

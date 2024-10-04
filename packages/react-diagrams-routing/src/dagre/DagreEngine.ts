@@ -1,4 +1,4 @@
-import { DiagramModel, PointModel } from '@projectstorm/react-diagrams-core';
+import { DiagramModel, PointModel } from '@fjdr/react-diagrams-core';
 import * as dagre from 'dagre';
 import { GraphLabel } from 'dagre';
 import _every from 'lodash/every';
@@ -7,7 +7,7 @@ import _forEach from 'lodash/forEach';
 import _map from 'lodash/map';
 import _range from 'lodash/range';
 import _sortBy from 'lodash/sortBy';
-import { Point } from '@projectstorm/geometry';
+import { Point } from '@fjdr/geometry';
 
 export interface DagreEngineOptions {
 	graph?: GraphLabel;

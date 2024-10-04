@@ -1,8 +1,8 @@
-import createEngine, { DiagramModel, DefaultNodeModel, DiagramEngine } from '@projectstorm/react-diagrams';
+import createEngine, { DiagramModel, DefaultNodeModel, DiagramEngine } from '@fjdr/react-diagrams';
 import _values from 'lodash/values';
 import * as React from 'react';
 import { DemoButton, DemoWorkspaceWidget } from '../helpers/DemoWorkspaceWidget';
-import { CanvasWidget } from '@projectstorm/react-canvas-core';
+import { CanvasWidget } from '@fjdr/react-canvas-core';
 import { DemoCanvasWidget } from '../helpers/DemoCanvasWidget';
 
 class CloneSelected extends React.Component<{ model: DiagramModel; engine: DiagramEngine }, any> {

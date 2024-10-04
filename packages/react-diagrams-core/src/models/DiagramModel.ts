@@ -13,7 +13,7 @@ import {
 	CanvasModelGenerics,
 	LayerModel,
 	DeserializeEvent
-} from '@projectstorm/react-canvas-core';
+} from '@fjdr/react-canvas-core';
 import { NodeLayerModel } from '../entities/node-layer/NodeLayerModel';
 import { LinkLayerModel } from '../entities/link-layer/LinkLayerModel';
 

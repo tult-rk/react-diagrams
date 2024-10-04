@@ -1,17 +1,17 @@
-# @projectstorm/react-diagrams-demo
+# @fjdr/react-diagrams-demo
 
 ## 7.0.4
 
 ### Patch Changes
 
-- @projectstorm/react-diagrams@7.0.4
+- @fjdr/react-diagrams@7.0.4
 
 ## 7.0.3
 
 ### Patch Changes
 
 - 66c687a: Upgrade all dependencies and fix Storybook after upgrade
-  - @projectstorm/react-diagrams@7.0.3
+  - @fjdr/react-diagrams@7.0.3
 
 ## 7.0.2
 
@@ -19,13 +19,13 @@
 
 - b8a4cbd: Inline sources in sourcemap
 - Updated dependencies [b8a4cbd]
-  - @projectstorm/react-diagrams@7.0.2
+  - @fjdr/react-diagrams@7.0.2
 
 ## 7.0.1
 
 ### Patch Changes
 
-- @projectstorm/react-diagrams@7.0.1
+- @fjdr/react-diagrams@7.0.1
 
 ## 7.0.0
 
@@ -53,4 +53,4 @@
 ### Patch Changes
 
 - Updated dependencies [b051697]
-  - @projectstorm/react-diagrams@7.0.0
+  - @fjdr/react-diagrams@7.0.0
