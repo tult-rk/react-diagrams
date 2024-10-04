@@ -1,7 +1,8 @@
 {
-	"name": "@projectstorm/react-diagrams",
+	"name": "react-diagrams",
 	"author": "dylanvorster",
 	"private": true,
+  "version": "1.0.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/projectstorm/react-diagrams.git"
