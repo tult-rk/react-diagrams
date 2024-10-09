@@ -4,7 +4,7 @@ import {
 	Action,
 	ActionEvent,
 	InputType
-} from '@projectstorm/react-canvas-core';
+} from '@fjdr/react-canvas-core';
 import { PortModel } from '../entities/port/PortModel';
 import { MouseEvent } from 'react';
 import { LinkModel } from '../entities/link/LinkModel';

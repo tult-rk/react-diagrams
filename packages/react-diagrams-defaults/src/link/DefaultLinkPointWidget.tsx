@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PointModel } from '@projectstorm/react-diagrams-core';
+import { PointModel } from '@fjdr/react-diagrams-core';
 import styled from '@emotion/styled';
 
 export interface DefaultLinkPointWidgetProps {

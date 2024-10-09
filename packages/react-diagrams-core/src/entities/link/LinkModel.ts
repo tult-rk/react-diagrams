@@ -6,7 +6,7 @@ import _slice from 'lodash/slice';
 import { LabelModel } from '../label/LabelModel';
 import { DiagramEngine } from '../../DiagramEngine';
 import { DiagramModel } from '../../models/DiagramModel';
-import { boundingBoxFromPoints, Point, Rectangle } from '@projectstorm/geometry';
+import { boundingBoxFromPoints, Point, Rectangle } from '@fjdr/geometry';
 import {
 	BaseEntityEvent,
 	BaseModel,
@@ -14,7 +14,7 @@ import {
 	BaseModelListener,
 	DeserializeEvent,
 	ModelGeometryInterface
-} from '@projectstorm/react-canvas-core';
+} from '@fjdr/react-canvas-core';
 
 export interface LinkModelListener extends BaseModelListener {
 	sourcePortChanged?(event: BaseEntityEvent<LinkModel> & { port: null | PortModel }): void;

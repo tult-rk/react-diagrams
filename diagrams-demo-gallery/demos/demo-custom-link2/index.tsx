@@ -5,14 +5,14 @@ import createEngine, {
 	DefaultLinkFactory,
 	DefaultLinkModel,
 	DefaultLinkWidget
-} from '@projectstorm/react-diagrams';
-import { LinkWidget, PointModel } from '@projectstorm/react-diagrams-core';
+} from '@fjdr/react-diagrams';
+import { LinkWidget, PointModel } from '@fjdr/react-diagrams-core';
 import * as React from 'react';
-import { CanvasWidget } from '@projectstorm/react-canvas-core';
+import { CanvasWidget } from '@fjdr/react-canvas-core';
 import { DemoCanvasWidget } from '../helpers/DemoCanvasWidget';
 import { MouseEvent } from 'react';
-import { DefaultLinkPointWidget, DefaultLinkSegmentWidget } from '@projectstorm/react-diagrams-defaults/dist';
-import { DiagramEngine } from '@projectstorm/react-diagrams-core/dist';
+import { DefaultLinkPointWidget, DefaultLinkSegmentWidget } from '@fjdr/react-diagrams-defaults/dist';
+import { DiagramEngine } from '@fjdr/react-diagrams-core/dist';
 
 export class AdvancedLinkModel extends DefaultLinkModel {
 	constructor() {

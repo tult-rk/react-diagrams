@@ -1,5 +1,5 @@
-import { Action, ActionEvent, InputType, State } from '@projectstorm/react-canvas-core';
-import { PortModel, LinkModel, DiagramEngine } from '@projectstorm/react-diagrams-core';
+import { Action, ActionEvent, InputType, State } from '@fjdr/react-canvas-core';
+import { PortModel, LinkModel, DiagramEngine } from '@fjdr/react-diagrams-core';
 import { MouseEvent, KeyboardEvent } from 'react';
 
 /**

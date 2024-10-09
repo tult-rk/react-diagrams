@@ -1,6 +1,6 @@
 import * as React from 'react';
 import _map from 'lodash/map';
-import { DiagramEngine } from '@projectstorm/react-diagrams-core';
+import { DiagramEngine } from '@fjdr/react-diagrams-core';
 import { DefaultNodeModel } from './DefaultNodeModel';
 import { DefaultPortLabel } from '../port/DefaultPortLabelWidget';
 import styled from '@emotion/styled';

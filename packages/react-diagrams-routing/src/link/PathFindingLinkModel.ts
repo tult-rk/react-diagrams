@@ -1,5 +1,5 @@
 import { PathFindingLinkFactory } from './PathFindingLinkFactory';
-import { DefaultLinkModel, DefaultLinkModelOptions } from '@projectstorm/react-diagrams-defaults';
+import { DefaultLinkModel, DefaultLinkModelOptions } from '@fjdr/react-diagrams-defaults';
 
 export class PathFindingLinkModel extends DefaultLinkModel {
 	constructor(options: DefaultLinkModelOptions = {}) {

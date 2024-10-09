@@ -1,4 +1,4 @@
-# @projectstorm/react-canvas-core
+# @fjdr/react-canvas-core
 
 ## 7.0.3
 
@@ -7,7 +7,7 @@
 - 09ed60f: Allow more derived State classes to provide a generic type
 - 80285fe: refactor: update lodash imports to use individual functions
 - Updated dependencies [80285fe]
-  - @projectstorm/geometry@7.0.3
+  - @fjdr/geometry@7.0.3
 
 ## 7.0.2
 
@@ -15,7 +15,7 @@
 
 - 66c687a: Upgrade all dependencies and fix Storybook after upgrade
 - Updated dependencies [66c687a]
-  - @projectstorm/geometry@7.0.2
+  - @fjdr/geometry@7.0.2
 
 ## 7.0.1
 
@@ -23,7 +23,7 @@
 
 - b8a4cbd: Inline sources in sourcemap
 - Updated dependencies [b8a4cbd]
-  - @projectstorm/geometry@7.0.1
+  - @fjdr/geometry@7.0.1
 
 ## 7.0.0
 
@@ -51,4 +51,4 @@
 ### Patch Changes
 
 - Updated dependencies [b051697]
-  - @projectstorm/geometry@7.0.0
+  - @fjdr/geometry@7.0.0

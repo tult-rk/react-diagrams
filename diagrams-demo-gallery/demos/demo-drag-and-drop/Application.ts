@@ -1,4 +1,4 @@
-import * as SRD from '@projectstorm/react-diagrams';
+import * as SRD from '@fjdr/react-diagrams';
 import { DiamondNodeFactory } from '../demo-custom-node1/DiamondNodeFactory';
 
 /**

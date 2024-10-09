@@ -1,4 +1,4 @@
-# @projectstorm/geometry
+# @fjdr/geometry
 
 ## 7.0.3
 

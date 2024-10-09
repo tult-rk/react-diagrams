@@ -1,4 +1,4 @@
-import { Action, ActionEvent, InputType, MoveItemsState } from '@projectstorm/react-canvas-core';
+import { Action, ActionEvent, InputType, MoveItemsState } from '@fjdr/react-canvas-core';
 import _forEach from 'lodash/forEach';
 import { PointModel } from '../entities/link/PointModel';
 import { DiagramEngine } from '../DiagramEngine';

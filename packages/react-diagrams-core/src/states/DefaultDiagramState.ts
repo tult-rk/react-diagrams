@@ -1,12 +1,5 @@
 import { MouseEvent, TouchEvent } from 'react';
-import {
-	SelectingState,
-	State,
-	Action,
-	InputType,
-	ActionEvent,
-	DragCanvasState
-} from '@projectstorm/react-canvas-core';
+import { SelectingState, State, Action, InputType, ActionEvent, DragCanvasState } from '@fjdr/react-canvas-core';
 import { PortModel } from '../entities/port/PortModel';
 import { DragNewLinkState } from './DragNewLinkState';
 import { DiagramEngine } from '../DiagramEngine';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import './main.css';
-import createEngine, { DefaultLinkModel, DiagramModel } from '@projectstorm/react-diagrams';
+import createEngine, { DefaultLinkModel, DiagramModel } from '@fjdr/react-diagrams';
 import { JSCustomNodeFactory } from './custom-node-js/JSCustomNodeFactory';
 import { TSCustomNodeFactory } from './custom-node-ts/TSCustomNodeFactory';
 import { JSCustomNodeModel } from './custom-node-js/JSCustomNodeModel';

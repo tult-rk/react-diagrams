@@ -1,5 +1,5 @@
 import { LinkModel } from '../link/LinkModel';
-import { BaseModel, BaseModelGenerics, BaseModelOptions, DeserializeEvent } from '@projectstorm/react-canvas-core';
+import { BaseModel, BaseModelGenerics, BaseModelOptions, DeserializeEvent } from '@fjdr/react-canvas-core';
 
 export interface LabelModelOptions extends BaseModelOptions {
 	offsetX?: number;

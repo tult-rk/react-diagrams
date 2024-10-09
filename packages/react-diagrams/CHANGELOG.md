@@ -1,4 +1,4 @@
-# @projectstorm/react-diagrams
+# @fjdr/react-diagrams
 
 ## 7.0.4
 
@@ -7,20 +7,20 @@
 - Updated dependencies [09ed60f]
 - Updated dependencies [20766f5]
 - Updated dependencies [80285fe]
-  - @projectstorm/react-canvas-core@7.0.3
-  - @projectstorm/react-diagrams-core@7.0.3
-  - @projectstorm/react-diagrams-defaults@7.1.3
-  - @projectstorm/react-diagrams-routing@7.1.3
+  - @fjdr/react-canvas-core@7.0.3
+  - @fjdr/react-diagrams-core@7.0.3
+  - @fjdr/react-diagrams-defaults@7.1.3
+  - @fjdr/react-diagrams-routing@7.1.3
 
 ## 7.0.3
 
 ### Patch Changes
 
 - Updated dependencies [66c687a]
-  - @projectstorm/react-diagrams-defaults@7.1.2
-  - @projectstorm/react-diagrams-routing@7.1.2
-  - @projectstorm/react-diagrams-core@7.0.2
-  - @projectstorm/react-canvas-core@7.0.2
+  - @fjdr/react-diagrams-defaults@7.1.2
+  - @fjdr/react-diagrams-routing@7.1.2
+  - @fjdr/react-diagrams-core@7.0.2
+  - @fjdr/react-canvas-core@7.0.2
 
 ## 7.0.2
 
@@ -28,18 +28,18 @@
 
 - b8a4cbd: Inline sources in sourcemap
 - Updated dependencies [b8a4cbd]
-  - @projectstorm/react-canvas-core@7.0.1
-  - @projectstorm/react-diagrams-core@7.0.1
-  - @projectstorm/react-diagrams-defaults@7.1.1
-  - @projectstorm/react-diagrams-routing@7.1.1
+  - @fjdr/react-canvas-core@7.0.1
+  - @fjdr/react-diagrams-core@7.0.1
+  - @fjdr/react-diagrams-defaults@7.1.1
+  - @fjdr/react-diagrams-routing@7.1.1
 
 ## 7.0.1
 
 ### Patch Changes
 
 - Updated dependencies [e0d21f1]
-  - @projectstorm/react-diagrams-defaults@7.1.0
-  - @projectstorm/react-diagrams-routing@7.1.0
+  - @fjdr/react-diagrams-defaults@7.1.0
+  - @fjdr/react-diagrams-routing@7.1.0
 
 ## 7.0.0
 
@@ -67,7 +67,7 @@
 ### Patch Changes
 
 - Updated dependencies [b051697]
-  - @projectstorm/react-diagrams-defaults@7.0.0
-  - @projectstorm/react-diagrams-routing@7.0.0
-  - @projectstorm/react-diagrams-core@7.0.0
-  - @projectstorm/react-canvas-core@7.0.0
+  - @fjdr/react-diagrams-defaults@7.0.0
+  - @fjdr/react-diagrams-routing@7.0.0
+  - @fjdr/react-diagrams-core@7.0.0
+  - @fjdr/react-canvas-core@7.0.0

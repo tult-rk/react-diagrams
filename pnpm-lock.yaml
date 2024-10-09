@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      eslint-scope:
+        specifier: ^5.1.1
+        version: 5.1.1
     devDependencies:
       '@changesets/cli':
         specifier: ^2.26.2
@@ -59,16 +63,16 @@ importers:
 
   diagrams-demo-gallery:
     dependencies:
-      '@projectstorm/react-canvas-core':
+      '@fjdr/react-canvas-core':
         specifier: workspace:*
         version: link:../packages/react-canvas-core
-      '@projectstorm/react-diagrams':
+      '@fjdr/react-diagrams':
         specifier: workspace:*
         version: link:../packages/react-diagrams
-      '@projectstorm/react-diagrams-core':
+      '@fjdr/react-diagrams-core':
         specifier: workspace:*
         version: link:../packages/react-diagrams-core
-      '@projectstorm/react-diagrams-defaults':
+      '@fjdr/react-diagrams-defaults':
         specifier: workspace:*
         version: link:../packages/react-diagrams-defaults
       gsap:
@@ -135,7 +139,7 @@ importers:
 
   diagrams-demo-project:
     dependencies:
-      '@projectstorm/react-diagrams':
+      '@fjdr/react-diagrams':
         specifier: workspace:*
         version: link:../packages/react-diagrams
       react:
@@ -200,7 +204,7 @@ importers:
       '@emotion/styled':
         specifier: ^11.11.0
         version: 11.11.0(@emotion/react@11.11.1(@types/react@18.2.22)(react@18.2.0))(@types/react@18.2.22)(react@18.2.0)
-      '@projectstorm/geometry':
+      '@fjdr/geometry':
         specifier: workspace:*
         version: link:../geometry
       lodash:
@@ -219,16 +223,16 @@ importers:
 
   packages/react-diagrams:
     dependencies:
-      '@projectstorm/react-canvas-core':
+      '@fjdr/react-canvas-core':
         specifier: workspace:*
         version: link:../react-canvas-core
-      '@projectstorm/react-diagrams-core':
+      '@fjdr/react-diagrams-core':
         specifier: workspace:*
         version: link:../react-diagrams-core
-      '@projectstorm/react-diagrams-defaults':
+      '@fjdr/react-diagrams-defaults':
         specifier: workspace:*
         version: link:../react-diagrams-defaults
-      '@projectstorm/react-diagrams-routing':
+      '@fjdr/react-diagrams-routing':
         specifier: workspace:*
         version: link:../react-diagrams-routing
 
@@ -237,10 +241,10 @@ importers:
       '@emotion/styled':
         specifier: ^11.11.0
         version: 11.11.0(@emotion/react@11.11.1(@types/react@18.2.22)(react@18.2.0))(@types/react@18.2.22)(react@18.2.0)
-      '@projectstorm/geometry':
+      '@fjdr/geometry':
         specifier: workspace:*
         version: link:../geometry
-      '@projectstorm/react-canvas-core':
+      '@fjdr/react-canvas-core':
         specifier: workspace:*
         version: link:../react-canvas-core
       lodash:
@@ -268,13 +272,13 @@ importers:
       '@emotion/styled':
         specifier: ^11.*
         version: 11.10.5(@babel/core@7.22.20)(@emotion/react@11.11.1(@types/react@18.2.22)(react@18.2.0))(@types/react@18.2.22)(react@18.2.0)
-      '@projectstorm/geometry':
+      '@fjdr/geometry':
         specifier: workspace:*
         version: link:../geometry
-      '@projectstorm/react-canvas-core':
+      '@fjdr/react-canvas-core':
         specifier: workspace:*
         version: link:../react-canvas-core
-      '@projectstorm/react-diagrams-core':
+      '@fjdr/react-diagrams-core':
         specifier: workspace:*
         version: link:../react-diagrams-core
       lodash:
@@ -293,16 +297,16 @@ importers:
 
   packages/react-diagrams-routing:
     dependencies:
-      '@projectstorm/geometry':
+      '@fjdr/geometry':
         specifier: workspace:*
         version: link:../geometry
-      '@projectstorm/react-canvas-core':
+      '@fjdr/react-canvas-core':
         specifier: workspace:*
         version: link:../react-canvas-core
-      '@projectstorm/react-diagrams-core':
+      '@fjdr/react-diagrams-core':
         specifier: workspace:*
         version: link:../react-diagrams-core
-      '@projectstorm/react-diagrams-defaults':
+      '@fjdr/react-diagrams-defaults':
         specifier: workspace:*
         version: link:../react-diagrams-defaults
       dagre:

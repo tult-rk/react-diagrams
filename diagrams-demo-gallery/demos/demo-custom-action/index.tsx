@@ -1,7 +1,7 @@
 import * as React from 'react';
 import _forEach from 'lodash/forEach';
-import createEngine, { DiagramModel, DefaultNodeModel, DefaultLinkModel } from '@projectstorm/react-diagrams';
-import { CanvasWidget, Action, ActionEvent, InputType } from '@projectstorm/react-canvas-core';
+import createEngine, { DiagramModel, DefaultNodeModel, DefaultLinkModel } from '@fjdr/react-diagrams';
+import { CanvasWidget, Action, ActionEvent, InputType } from '@fjdr/react-canvas-core';
 import { DemoCanvasWidget } from '../helpers/DemoCanvasWidget';
 
 interface CustomDeleteItemsActionOptions {
