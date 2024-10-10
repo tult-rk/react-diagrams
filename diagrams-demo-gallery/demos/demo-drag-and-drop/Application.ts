@@ -27,12 +27,12 @@ export class Application {
 		});
 
 		//3-A) create a default node
-		var node1 = new SRD.DefaultNodeModel('Node 1', 'rgb(0,192,255)');
+		var node1 = new SRD.DefaultNodeModel('Node 1', '#B692F6');
 		let port = node1.addOutPort('Out');
 		node1.setPosition(100, 100);
 
 		//3-B) create another default node
-		var node2 = new SRD.DefaultNodeModel('Node 2', 'rgb(192,255,0)');
+		var node2 = new SRD.DefaultNodeModel('Node 2', '#25AAD0');
 		let port2 = node2.addInPort('In');
 		node2.setPosition(400, 100);
 
