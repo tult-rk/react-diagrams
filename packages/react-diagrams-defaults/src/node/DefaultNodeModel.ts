@@ -8,6 +8,8 @@ export interface DefaultNodeModelOptions extends BasePositionModelOptions {
 	name?: string;
 	color?: string;
 	icon?: ReactNode;
+	shape?: boolean;
+	sub?: string;
 }
 
 export interface DefaultNodeModelGenerics extends NodeModelGenerics {
@@ -17,25 +19,30 @@ export interface DefaultNodeModelGenerics extends NodeModelGenerics {
 export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 	protected portsIn: DefaultPortModel[];
 	protected portsOut: DefaultPortModel[];
+	protected shape: boolean;
+	protected sub?: string;
 
-	constructor(name: string, color: string, icon?: ReactNode);
+	constructor(name: string, color: string);
 	constructor(options?: DefaultNodeModelOptions);
-	constructor(options: any = {}, color?: string, icon?: ReactNode) {
+	constructor(options: any = {}, color?: string) {
 		if (typeof options === 'string') {
 			options = {
 				name: options,
-				color: color,
-				icon: icon
+				color: color
 			};
 		}
 		super({
 			type: 'default',
 			name: 'Untitled',
 			color: 'rgb(0,192,255)',
+			sub: 'sub title',
+			shape: true,
 			...options
 		});
 		this.portsOut = [];
 		this.portsIn = [];
+		this.shape = typeof options !== 'string' && options.shape;
+		this.sub = this.options.sub;
 	}
 
 	doClone(lookupTable: {}, clone: any): void {
@@ -97,6 +104,8 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 		super.deserialize(event);
 		this.options.name = event.data.name;
 		this.options.color = event.data.color;
+		this.options.sub = event.data.sub;
+		this.shape = event.data.shape;
 		this.portsIn = _map(event.data.portsInOrder, (id) => {
 			return this.getPortFromID(id);
 		}) as DefaultPortModel[];
@@ -110,6 +119,8 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 			...super.serialize(),
 			name: this.options.name,
 			color: this.options.color,
+			shape: this.shape,
+			sub: this.options.sub,
 			portsInOrder: _map(this.portsIn, (port) => {
 				return port.getID();
 			}),
@@ -121,6 +132,18 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 
 	getInPorts(): DefaultPortModel[] {
 		return this.portsIn;
+	}
+
+	changeShape(value) {
+		this.shape = value;
+	}
+
+	getShape(): boolean {
+		return this.shape || false;
+	}
+
+	changeOptions(key, value) {
+		this.options[key] = value;
 	}
 
 	setName(value: string) {

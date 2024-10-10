@@ -6,19 +6,21 @@ import { DefaultPortLabel } from '../port/DefaultPortLabelWidget';
 import styled from '@emotion/styled';
 
 namespace S {
-	export const Node = styled.div<{ background: string; selected: boolean }>`
+	export const Node = styled.div<{ background: string; selected: boolean; shape: boolean }>`
 		background-color: ${(p) => p.background};
-		border-radius: 5px;
+		border-radius: ${(p) => (p.shape ? '16px' : 'unset')};
 		font-family: sans-serif;
 		color: white;
 		border: solid 2px black;
 		overflow: visible;
-		font-size: 11px;
+		font-size: 14px;
+		line-height: 20px;
+		padding: 10px;
+		width: 203px;
 		border: solid 2px ${(p) => (p.selected ? 'rgb(0,192,255)' : 'black')};
 	`;
 
 	export const Title = styled.div`
-		background: rgba(0, 0, 0, 0.3);
 		display: flex;
 		white-space: nowrap;
 		justify-items: center;
@@ -28,29 +30,39 @@ namespace S {
 		padding: 8px;
 	`;
 
-	export const TitleName = styled.div`
+	export const TitleWrapper = styled.div<{ background: string }>`
 		flex-grow: 1;
 		padding: 5px 5px;
+		display: flex;
+		flex-direction: column;
 		input {
-			background-color: transparent;
+			background-color: ${(p) => p.background};
 			border: none;
 			outline: none;
 			padding: 0 5px;
-			font-size: 14px;
 			color: white;
+		}
+	`;
+
+	export const TitleName = styled.div`
+		input {
+			font-size: 14px;
+			font-weight: bold;
 		}
 	`;
 
 	export const Ports = styled.div`
 		display: flex;
-		background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+		background-color: white;
+		border-radius: 8px;
 	`;
 
-	export const PortsContainer = styled.div`
-		flex-grow: 1;
+	export const PortsContainer = styled.div<{ isIn: boolean }>`
+		max-width: 50%;
+		flex-basis: 50%;
 		display: flex;
 		flex-direction: column;
-
+		align-items: ${(p) => (p.isIn ? 'flex-start' : 'flex-end')};
 		&:first-of-type {
 			margin-right: 10px;
 		}
@@ -68,6 +80,7 @@ export interface DefaultNodeProps {
 
 interface DefaultNodeState {
 	nodeName: string;
+	subTitle?: string;
 	inputWidth: string;
 }
 
@@ -76,6 +89,7 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 		super(props);
 		this.state = {
 			nodeName: props.node.getOptions().name,
+			subTitle: props.node.getOptions().sub,
 			inputWidth: this.calculateInputWidth(props.node.getOptions().name)
 		};
 	}
@@ -95,6 +109,14 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 		this.props.node.setName(newName);
 	};
 
+	handleChangeSub = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const subTitle = event.target.value;
+		this.setState({
+			subTitle: subTitle
+		});
+		this.props.node.changeOptions('sub', subTitle);
+	};
+
 	generatePort = (port: any): JSX.Element => {
 		return <DefaultPortLabel engine={this.props.engine} port={port} key={port.getID()} />;
 	};
@@ -105,21 +127,34 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 				data-default-node-name={this.props.node.getOptions().name}
 				selected={this.props.node.isSelected()}
 				background={this.props.node.getOptions().color}
+				shape={this.props.node.getShape()}
 			>
 				<S.Title>
 					{this.props.node.getOptions().icon && <S.Icon>{this.props.node.getOptions().icon}</S.Icon>}
-					<S.TitleName>
-						<input
-							type="text"
-							value={this.props.node.getOptions().name}
-							onChange={this.handleNameChange}
-							style={{ width: this.state.inputWidth }}
-						/>
-					</S.TitleName>
+					<S.TitleWrapper background={this.props.node.getOptions().color}>
+						<S.TitleName>
+							<input
+								type="text"
+								value={this.props.node.getOptions().name}
+								onChange={this.handleNameChange}
+								onFocus={() => this.props.engine.getModel().setEdited(true)}
+								onBlur={() => this.props.engine.getModel().setEdited(false)}
+							/>
+						</S.TitleName>
+						<div>
+							<input
+								type="text"
+								value={this.props.node.getOptions().sub}
+								onChange={this.handleChangeSub}
+								onFocus={() => this.props.engine.getModel().setEdited(true)}
+								onBlur={() => this.props.engine.getModel().setEdited(false)}
+							/>
+						</div>
+					</S.TitleWrapper>
 				</S.Title>
 				<S.Ports>
-					<S.PortsContainer>{_map(this.props.node.getInPorts(), this.generatePort)}</S.PortsContainer>
-					<S.PortsContainer>{_map(this.props.node.getOutPorts(), this.generatePort)}</S.PortsContainer>
+					<S.PortsContainer isIn={true}>{_map(this.props.node.getInPorts(), this.generatePort)}</S.PortsContainer>
+					<S.PortsContainer isIn={false}>{_map(this.props.node.getOutPorts(), this.generatePort)}</S.PortsContainer>
 				</S.Ports>
 			</S.Node>
 		);
