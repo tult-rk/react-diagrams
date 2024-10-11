@@ -15,27 +15,26 @@ namespace S {
 		align-items: center;
 	`;
 
-	export const Label = styled.div`
+	export const Label = styled.div<{ isIn: boolean }>`
 		padding: 0 5px;
 		flex-grow: 1;
 		display: flex;
 		align-items: center;
 
 		input {
-			background-color: transparent;
+			background-color: 'white';
 			border: none;
 			outline: none;
-			padding: 0 5px;
+			padding: 8px;
 			font-size: 14px;
-			color: white;
+			color: black;
+			width: 100%;
 		}
 	`;
 
 	export const Port = styled.div`
 		width: 15px;
 		height: 15px;
-		background: rgba(255, 255, 255, 0.1);
-
 		&:hover {
 			background: rgb(192, 255, 0);
 		}
@@ -73,16 +72,17 @@ export class DefaultPortLabel extends React.Component<DefaultPortLabelProps, Def
 	render() {
 		const port = (
 			<PortWidget engine={this.props.engine} port={this.props.port}>
-				<S.Port />
+				<S.Port>{this.props.port.getOptions().icon ?? null}</S.Port>
 			</PortWidget>
 		);
 		const label = (
-			<S.Label>
+			<S.Label isIn={this.props.port.getOptions().in}>
 				<input
 					type="text"
 					value={this.props.port.getOptions().label}
 					onChange={this.handleNameChange}
-					style={{ width: this.state.inputWidth }}
+					onFocus={() => this.props.engine.getModel().setEdited(true)}
+					onBlur={() => this.props.engine.getModel().setEdited(false)}
 				/>
 			</S.Label>
 		);

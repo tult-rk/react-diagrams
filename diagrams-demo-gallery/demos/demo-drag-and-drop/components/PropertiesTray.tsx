@@ -9,6 +9,14 @@ interface Props {
 	onClose: () => void;
 }
 
+const colors = [
+	{ name: 'Red', value: 'red' },
+	{ name: 'Green', value: 'green' },
+	{ name: 'Blue', value: 'blue' },
+	{ name: 'Yellow', value: 'yellow' },
+	{ name: 'Black', value: 'black' }
+];
+
 export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 	const model = engine.getModel();
 	const [node, setNode] = useState<DefaultNodeModel>(null);
@@ -17,6 +25,7 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 	const [portName, setPortName] = useState(null);
 	const [portsIn, setPortsIn] = useState<DefaultPortModel[]>(null);
 	const [portsOut, setPortsOut] = useState<DefaultPortModel[]>(null);
+	const [isShape, setIsShape] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (!engine) {
@@ -31,6 +40,7 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 		if (!!node) {
 			setPortsIn(node.getInPorts());
 			setPortsOut(node.getOutPorts());
+			setIsShape(node.getShape());
 		}
 	}, [node, node?.getInPorts(), node?.getOutPorts()]);
 
@@ -53,6 +63,11 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 			setIsAddPortIn(false);
 			setIsAddPortOut(false);
 		}
+	};
+
+	const handleColorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		node.changeOptions('color', event.target.value);
+		engine.repaintCanvas();
 	};
 
 	const onFocus = useCallback(() => {
@@ -115,6 +130,12 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 		[element, node?.getPorts(), model.getEdited()]
 	);
 
+	const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setIsShape(event.target.value === 'true');
+		node.changeShape(event.target.value === 'true');
+		engine.repaintCanvas();
+	};
+
 	return (
 		<>
 			<button onClick={onClose}>Close</button>
@@ -130,19 +151,42 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 			/>
 			<div style={{ color: 'white', display: 'flex', alignItems: 'center' }}>
 				Color:
-				<div
-					style={{
-						width: 10,
-						height: 10,
-						margin: '0 5px',
-						backgroundColor: element?.entity?.options?.color
-					}}
-				></div>
+				<input
+					type="color"
+					defaultValue={node?.getOptions().color}
+					onChange={(e) => handleColorChange(e)}
+					style={{ width: 25, height: 25, padding: '0', border: 'none' }}
+				/>
 			</div>
 			<div style={{ color: 'white' }}>Height: {element?.entity?.height}</div>
 			<div style={{ color: 'white' }}>Width: {element?.entity?.width}</div>
 
 			<div style={{ borderBottom: '1px solid white', margin: '10px 0 ' }} />
+
+			<div style={{ color: 'white', marginBottom: 10 }}>
+				<h3>Select Shape Option:</h3>
+				<label>
+					<input
+						type="radio"
+						name="shapeOption"
+						value="true"
+						checked={isShape === true}
+						onChange={handleOptionChange}
+					/>
+					Shape (True)
+				</label>
+				<br />
+				<label>
+					<input
+						type="radio"
+						name="shapeOption"
+						value="false"
+						checked={isShape === false}
+						onChange={handleOptionChange}
+					/>
+					Un-shape (False)
+				</label>
+			</div>
 
 			<div style={{ color: 'white', marginBottom: 10 }}>Port In</div>
 			<div style={{ paddingLeft: 10 }}>
