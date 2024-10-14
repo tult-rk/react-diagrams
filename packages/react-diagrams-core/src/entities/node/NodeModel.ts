@@ -13,6 +13,7 @@ import {
 	DeserializeEvent
 } from '@fjdr/react-canvas-core';
 import { DiagramEngine } from '../../DiagramEngine';
+import { GroupModel } from '../group/GroupModel';
 
 export interface NodeModelListener extends BaseModelListener {
 	positionChanged?(event: BaseEntityEvent<NodeModel>): void;
@@ -20,7 +21,7 @@ export interface NodeModelListener extends BaseModelListener {
 
 export interface NodeModelGenerics extends BasePositionModelGenerics {
 	LISTENER: NodeModelListener;
-	PARENT: DiagramModel;
+	PARENT: DiagramModel | GroupModel;
 }
 
 export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends BasePositionModel<G> {
