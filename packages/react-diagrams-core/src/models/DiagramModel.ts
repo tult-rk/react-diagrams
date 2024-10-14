@@ -16,10 +16,12 @@ import {
 } from '@fjdr/react-canvas-core';
 import { NodeLayerModel } from '../entities/node-layer/NodeLayerModel';
 import { LinkLayerModel } from '../entities/link-layer/LinkLayerModel';
+import { GroupModel } from '../entities/group/GroupModel';
+import { GroupLayerModel } from '../entities/group-layer/GroupLayerModel';
 
 export interface DiagramListener extends BaseEntityListener {
 	nodesUpdated?(event: BaseEntityEvent & { node: NodeModel; isCreated: boolean }): void;
-
+	groupsUpdated?(event: BaseEntityEvent & { group: GroupModel; isCreated: boolean }): void;
 	linksUpdated?(event: BaseEntityEvent & { link: LinkModel; isCreated: boolean }): void;
 }
 
@@ -30,11 +32,13 @@ export interface DiagramModelGenerics extends CanvasModelGenerics {
 export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics> extends CanvasModel<G> {
 	protected activeNodeLayer: NodeLayerModel;
 	protected activeLinkLayer: LinkLayerModel;
+	protected activeGroupLayer: GroupLayerModel;
 
 	constructor(options: G['OPTIONS'] = {}) {
 		super(options);
 		this.addLayer(new LinkLayerModel());
 		this.addLayer(new NodeLayerModel());
+		this.addLayer(new GroupLayerModel());
 	}
 
 	deserialize(event: DeserializeEvent<this>) {
@@ -50,6 +54,9 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 		if (layer instanceof LinkLayerModel) {
 			this.activeLinkLayer = layer;
 		}
+		if (layer instanceof GroupLayerModel) {
+			this.activeGroupLayer = layer;
+		}
 	}
 
 	getLinkLayers(): LinkLayerModel[] {
@@ -64,6 +71,12 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 		}) as NodeLayerModel[];
 	}
 
+	getGroupLayers(): GroupLayerModel[] {
+		return _filter(this.layers, (layer) => {
+			return layer instanceof GroupLayerModel;
+		}) as GroupLayerModel[];
+	}
+
 	getActiveNodeLayer(): NodeLayerModel {
 		if (!this.activeNodeLayer) {
 			const layers = this.getNodeLayers();
@@ -74,6 +87,19 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 			}
 		}
 		return this.activeNodeLayer;
+	}
+
+	getActiveGroupLayer(): GroupLayerModel {
+		if (!this.activeGroupLayer) {
+			const layers = this.getGroupLayers();
+			if (layers.length === 0) {
+				this.addLayer(new GroupLayerModel());
+				this.activeGroupLayer = this.getGroupLayers()[0];
+			} else {
+				this.activeGroupLayer = layers[0];
+			}
+		}
+		return this.activeGroupLayer;
 	}
 
 	getActiveLinkLayer(): LinkLayerModel {
@@ -97,6 +123,15 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 		}
 	}
 
+	getGroup(group: string): GroupModel {
+		for (const layer of this.getGroupLayers()) {
+			const model = layer.getModel(group);
+			if (model) {
+				return model;
+			}
+		}
+	}
+
 	getLink(link: string): LinkModel {
 		for (const layer of this.getLinkLayers()) {
 			const model = layer.getModel(link);
@@ -112,6 +147,8 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 				this.addLink(model);
 			} else if (model instanceof NodeModel) {
 				this.addNode(model);
+			} else if (model instanceof GroupModel) {
+				this.addGroup(model);
 			}
 		});
 		return models;
@@ -127,6 +164,12 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 			'linksUpdated'
 		);
 		return link;
+	}
+
+	addGroup(group: GroupModel): GroupModel {
+		this.getActiveGroupLayer().addModel(group);
+		this.fireEvent({ group, isCreated: true }, 'groupsUpdated');
+		return group;
 	}
 
 	addNode(node: NodeModel): NodeModel {
@@ -153,6 +196,15 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 		}
 	}
 
+	removeGroup(group: GroupModel) {
+		const removed = _some(this.getGroupLayers(), (layer) => {
+			return layer.removeModel(group);
+		});
+		if (removed) {
+			this.fireEvent({ group, isCreated: false }, 'groupsUpdated');
+		}
+	}
+
 	getLinks(): LinkModel[] {
 		return _flatMap(this.getLinkLayers(), (layer) => {
 			return _values(layer.getModels());
@@ -161,6 +213,12 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 
 	getNodes(): NodeModel[] {
 		return _flatMap(this.getNodeLayers(), (layer) => {
+			return _values(layer.getModels());
+		});
+	}
+
+	getGroups(): GroupModel[] {
+		return _flatMap(this.getGroupLayers(), (layer) => {
 			return _values(layer.getModels());
 		});
 	}

@@ -13,8 +13,16 @@ export * from './entities/node-layer/NodeLayerModel';
 export * from './entities/node-layer/NodeLayerWidget';
 export * from './entities/node-layer/NodeLayerFactory';
 
+export * from './entities/group-layer/GroupLayerModel';
+export * from './entities/group-layer/GroupLayerWidget';
+export * from './entities/group-layer/GroupLayerFactory';
+
 export * from './entities/node/NodeModel';
 export * from './entities/node/NodeWidget';
+
+export * from './entities/group/GroupModel';
+export * from './entities/group/GroupWidget';
+
 export * from './entities/port/PortModel';
 export * from './entities/port/PortWidget';
 

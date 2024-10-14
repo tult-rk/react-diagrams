@@ -1,6 +1,6 @@
 import * as SRD from '@fjdr/react-diagrams';
 import { DiamondNodeFactory } from '../demo-custom-node1/DiamondNodeFactory';
-
+import * as beautify from 'json-beautify';
 /**
  * @author Dylan Vorster
  */
@@ -39,7 +39,8 @@ export class Application {
 		// link the ports
 		let link1 = port.link(port2);
 
-		this.activeModel.addAll(node1, node2, link1);
+		// create a group layer
+		this.activeModel.addAll(link1, node1, node2);
 	}
 
 	public getActiveDiagram(): SRD.DiagramModel {

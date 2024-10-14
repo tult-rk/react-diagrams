@@ -15,6 +15,7 @@ import {
 	Toolkit
 } from '@fjdr/react-canvas-core';
 import { DiagramModel } from './models/DiagramModel';
+import { GroupModel } from './entities/group/GroupModel';
 
 /**
  * Passed as a parameter to the DiagramWidget
@@ -24,7 +25,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 	protected linkFactories: FactoryBank<AbstractReactFactory<LinkModel, DiagramEngine>>;
 	protected portFactories: FactoryBank<AbstractModelFactory<PortModel, DiagramEngine>>;
 	protected labelFactories: FactoryBank<AbstractReactFactory<LabelModel, DiagramEngine>>;
-
+	protected groupFactories: FactoryBank<AbstractReactFactory<GroupModel, DiagramEngine>>;
 	maxNumberPointsPerLink: number;
 
 	constructor(options: CanvasEngineOptions = {}) {
@@ -36,7 +37,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		this.linkFactories = new FactoryBank();
 		this.portFactories = new FactoryBank();
 		this.labelFactories = new FactoryBank();
-
+		this.groupFactories = new FactoryBank();
 		const setup = (factory: FactoryBank) => {
 			factory.registerListener({
 				factoryAdded: (event) => {
@@ -52,6 +53,7 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		setup(this.linkFactories);
 		setup(this.portFactories);
 		setup(this.labelFactories);
+		setup(this.groupFactories);
 	}
 
 	/**
@@ -66,6 +68,12 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		if (element) {
 			var nodeElement = Toolkit.closest(target, '.node[data-nodeid]') as HTMLElement;
 			return diagramModel.getNode(nodeElement.getAttribute('data-nodeid')).getPort(element.getAttribute('data-name'));
+		}
+
+		//look for a group
+		element = Toolkit.closest(target, '.group[data-groupid]');
+		if (element) {
+			return diagramModel.getGroup(element.getAttribute('data-groupid'));
 		}
 
 		//look for a point
@@ -99,6 +107,10 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		return this.linkFactories;
 	}
 
+	getGroupFactories() {
+		return this.groupFactories;
+	}
+
 	getLabelFactories() {
 		return this.labelFactories;
 	}
@@ -120,6 +132,12 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		}
 		return this.linkFactories.getFactory<F>(link.getType());
 	}
+	getFactoryForGroup<F extends AbstractReactFactory<GroupModel, DiagramEngine>>(group: GroupModel) {
+		if (typeof group === 'string') {
+			return this.groupFactories.getFactory(group);
+		}
+		return this.groupFactories.getFactory(group.getType());
+	}
 
 	getFactoryForLabel<F extends AbstractReactFactory<LabelModel, DiagramEngine>>(label: LabelModel) {
 		if (typeof label === 'string') {
@@ -137,6 +155,10 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 
 	generateWidgetForLink(link: LinkModel): JSX.Element {
 		return this.getFactoryForLink(link).generateReactWidget({ model: link });
+	}
+
+	generateWidgetForGroup(group: GroupModel): JSX.Element {
+		return this.getFactoryForGroup(group).generateReactWidget({ model: group });
 	}
 
 	generateWidgetForNode(node: NodeModel): JSX.Element {

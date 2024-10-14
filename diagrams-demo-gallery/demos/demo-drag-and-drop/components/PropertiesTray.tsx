@@ -1,7 +1,7 @@
 import * as SRD from '@fjdr/react-diagrams';
-import { DefaultNodeModel, DefaultPortModel } from '@fjdr/react-diagrams-defaults';
+import { DefaultGroupModel, DefaultNodeModel, DefaultPortModel } from '@fjdr/react-diagrams-defaults';
 import { randomUUID } from 'crypto';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
 	engine: SRD.DiagramEngine;
@@ -26,6 +26,30 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 	const [portsIn, setPortsIn] = useState<DefaultPortModel[]>(null);
 	const [portsOut, setPortsOut] = useState<DefaultPortModel[]>(null);
 	const [isShape, setIsShape] = useState<boolean>(true);
+
+	const [selectedEntities, setSelectedEntities] = useState<any>([]);
+	// TODO: Dùng redux để quản lý selected node
+
+	const previousSelectedRef = useRef<any>([]);
+
+	const areEntitiesEqual = (prev: any[], current: any[]) => {
+		if (prev.length !== current.length) return false;
+		return prev.every((entity, index) => entity.getID() === current[index].getID());
+	};
+
+	const updateSelectedEntities = useCallback(() => {
+		const currentSelected = engine.getModel().getSelectedEntities() as SRD.BaseModel<any>[];
+		if (!areEntitiesEqual(previousSelectedRef.current, currentSelected)) {
+			setSelectedEntities(currentSelected);
+			previousSelectedRef.current = currentSelected;
+			console.log('Selected entities updated:', currentSelected);
+		}
+	}, [engine]);
+
+	useEffect(() => {
+		const interval = setInterval(updateSelectedEntities, 100);
+		return () => clearInterval(interval);
+	}, [updateSelectedEntities]);
 
 	useEffect(() => {
 		if (!engine) {
@@ -135,6 +159,19 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 		node.changeShape(event.target.value === 'true');
 		engine.repaintCanvas();
 	};
+
+	const handleAddGroup = () => {
+		console.log('======================', selectedEntities);
+		const group = new DefaultGroupModel();
+		selectedEntities.forEach((entity) => {
+			group.addNode(entity);
+		});
+		model.addGroup(group);
+	};
+
+	if (selectedEntities.length > 1) {
+		return <button onClick={handleAddGroup}>Add Group</button>;
+	}
 
 	return (
 		<>

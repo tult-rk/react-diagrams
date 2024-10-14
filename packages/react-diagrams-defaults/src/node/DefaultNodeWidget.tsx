@@ -118,6 +118,7 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 	};
 
 	generatePort = (port: any): JSX.Element => {
+		// TODO: fix to port available
 		return <DefaultPortLabel engine={this.props.engine} port={port} key={port.getID()} />;
 	};
 
