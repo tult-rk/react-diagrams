@@ -122,12 +122,14 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 	};
 
 	render() {
+		const shape = this.props.node.getShape();
+
 		return (
 			<S.Node
 				data-default-node-name={this.props.node.getOptions().name}
 				selected={this.props.node.isSelected()}
 				background={this.props.node.getOptions().color}
-				shape={this.props.node.getShape()}
+				{...(shape !== undefined && { shape })}
 			>
 				<S.Title>
 					{this.props.node.getOptions().icon && <S.Icon>{this.props.node.getOptions().icon}</S.Icon>}

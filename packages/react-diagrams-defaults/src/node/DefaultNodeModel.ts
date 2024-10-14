@@ -36,12 +36,12 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 			name: 'Untitled',
 			color: 'rgb(0,192,255)',
 			sub: 'sub title',
-			shape: true,
+			shape: false,
 			...options
 		});
 		this.portsOut = [];
 		this.portsIn = [];
-		this.shape = typeof options !== 'string' && options.shape;
+		this.shape = typeof options !== 'string' && options.shape !== undefined ? options.shape : false;
 		this.sub = this.options.sub;
 	}
 
@@ -134,7 +134,7 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 		return this.portsIn;
 	}
 
-	changeShape(value) {
+	changeShape(value: boolean) {
 		this.shape = value;
 	}
 
