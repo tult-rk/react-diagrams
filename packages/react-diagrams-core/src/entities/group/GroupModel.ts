@@ -115,7 +115,11 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 		return node;
 	}
 
-	updateDimensions({ width, height }: { width: number; height: number }) {
+	getSize() {
+		return { width: this.width, height: this.height };
+	}
+
+	setSize({ width, height }: { width: number; height: number }) {
 		this.width = width;
 		this.height = height;
 	}

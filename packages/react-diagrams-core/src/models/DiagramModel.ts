@@ -89,6 +89,19 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 		return this.activeNodeLayer;
 	}
 
+	getActiveGroupLayer(): GroupLayerModel {
+		if (!this.activeGroupLayer) {
+			const layers = this.getGroupLayers();
+			if (layers.length === 0) {
+				this.addLayer(new GroupLayerModel());
+				this.activeGroupLayer = this.getGroupLayers()[0];
+			} else {
+				this.activeGroupLayer = layers[0];
+			}
+		}
+		return this.activeGroupLayer;
+	}
+
 	getActiveLinkLayer(): LinkLayerModel {
 		if (!this.activeLinkLayer) {
 			const layers = this.getLinkLayers();
@@ -134,6 +147,8 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 				this.addLink(model);
 			} else if (model instanceof NodeModel) {
 				this.addNode(model);
+			} else if (model instanceof GroupModel) {
+				this.addGroup(model);
 			}
 		});
 		return models;
@@ -149,6 +164,12 @@ export class DiagramModel<G extends DiagramModelGenerics = DiagramModelGenerics>
 			'linksUpdated'
 		);
 		return link;
+	}
+
+	addGroup(group: GroupModel): GroupModel {
+		this.getActiveGroupLayer().addModel(group);
+		this.fireEvent({ group, isCreated: true }, 'groupsUpdated');
+		return group;
 	}
 
 	addNode(node: NodeModel): NodeModel {

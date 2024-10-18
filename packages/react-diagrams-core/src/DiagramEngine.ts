@@ -133,7 +133,10 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		return this.linkFactories.getFactory<F>(link.getType());
 	}
 	getFactoryForGroup<F extends AbstractReactFactory<GroupModel, DiagramEngine>>(group: GroupModel) {
-		return this.groupFactories.getFactory<F>(group.getType());
+		if (typeof group === 'string') {
+			return this.groupFactories.getFactory(group);
+		}
+		return this.groupFactories.getFactory(group.getType());
 	}
 
 	getFactoryForLabel<F extends AbstractReactFactory<LabelModel, DiagramEngine>>(label: LabelModel) {

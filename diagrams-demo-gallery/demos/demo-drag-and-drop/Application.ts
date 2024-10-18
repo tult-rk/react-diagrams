@@ -1,6 +1,6 @@
 import * as SRD from '@fjdr/react-diagrams';
 import { DiamondNodeFactory } from '../demo-custom-node1/DiamondNodeFactory';
-
+import * as beautify from 'json-beautify';
 /**
  * @author Dylan Vorster
  */
@@ -39,7 +39,15 @@ export class Application {
 		// link the ports
 		let link1 = port.link(port2);
 
-		this.activeModel.addAll(node1, node2, link1);
+		// create a group layer
+		const group1 = new SRD.DefaultGroupModel();
+		group1.addNode(node1);
+		group1.addNode(node2);
+
+		group1.setPosition(200, 200);
+
+		console.log('===============> group1', beautify(group1.serialize(), null, 2, 80));
+		this.activeModel.addAll(link1, group1);
 	}
 
 	public getActiveDiagram(): SRD.DiagramModel {

@@ -57,7 +57,7 @@ export class GroupWidget extends React.Component<GroupProps> {
 	}
 
 	updateSize(width: number, height: number) {
-		this.props.group.updateDimensions({ width, height });
+		this.props.group.setSize({ width, height });
 
 		//now mark the links as dirty
 		// TODO: update later

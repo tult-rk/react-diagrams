@@ -15,3 +15,7 @@ export * from './node/DefaultNodeWidget';
 export * from './port/DefaultPortFactory';
 export * from './port/DefaultPortLabelWidget';
 export * from './port/DefaultPortModel';
+
+export * from './group/DefaultGroupModel';
+export * from './group/DefaultGroupWidget';
+export * from './group/DefaultGroupFactory';

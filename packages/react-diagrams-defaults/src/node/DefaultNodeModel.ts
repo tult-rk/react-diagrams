@@ -153,4 +153,11 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 	getOutPorts(): DefaultPortModel[] {
 		return this.portsOut;
 	}
+
+	getSize() {
+		return {
+			width: this.width,
+			height: this.height
+		};
+	}
 }
