@@ -123,7 +123,8 @@ export class BodyWidget extends React.Component<BodyWidgetProps, State> {
 								const port1 = new DefaultPortModel({
 									name: 'In',
 									in: true,
-									icon: <FaCaretRight size="small" color="red" />
+									icon: 'rhombus',
+									icon_color: '#167646'
 								});
 								node.addPort(port1);
 								node.addOutPort('Out');

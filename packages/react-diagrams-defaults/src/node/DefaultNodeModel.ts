@@ -41,7 +41,7 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 		});
 		this.portsOut = [];
 		this.portsIn = [];
-		this.shape = typeof options !== 'string' && options.shape !== undefined ? options.shape : false;
+		this.shape = typeof options !== 'string' && options.shape !== undefined ? Boolean(options.shape) : false;
 		this.sub = this.options.sub;
 	}
 
@@ -135,11 +135,11 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 	}
 
 	changeShape(value: boolean) {
-		this.shape = value;
+		this.shape = Boolean(value);
 	}
 
 	getShape(): boolean {
-		return this.shape || false;
+		return this.shape;
 	}
 
 	changeOptions(key, value) {

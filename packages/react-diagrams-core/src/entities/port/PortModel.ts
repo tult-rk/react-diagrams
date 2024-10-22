@@ -33,6 +33,8 @@ export interface PortModelOptions extends BaseModelOptions {
 	alignment?: PortModelAlignment;
 	maximumLinks?: number;
 	name: string;
+	icon?: string;
+	icon_color?: string;
 }
 
 export interface PortModelGenerics extends BasePositionModelGenerics {

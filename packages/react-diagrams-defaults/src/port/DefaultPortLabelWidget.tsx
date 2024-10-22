@@ -2,6 +2,7 @@ import * as React from 'react';
 import { DiagramEngine, PortWidget } from '@fjdr/react-diagrams-core';
 import { DefaultPortModel } from './DefaultPortModel';
 import styled from '@emotion/styled';
+import { Triangle, Rhombus, Round } from './PortIcon';
 
 export interface DefaultPortLabelProps {
 	port: DefaultPortModel;
@@ -15,7 +16,7 @@ namespace S {
 		align-items: center;
 	`;
 
-	export const Label = styled.div<{ isIn: boolean }>`
+	export const Label = styled.div`
 		padding: 0 5px;
 		flex-grow: 1;
 		display: flex;
@@ -32,12 +33,21 @@ namespace S {
 		}
 	`;
 
-	export const Port = styled.div`
+	export const Port = styled.div<{ isIn: boolean }>`
 		width: 15px;
 		height: 15px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		${({ isIn }) => (!isIn ? 'margin-right: 5px;' : 'margin-left: 5px;')}
 		&:hover {
 			background: rgb(192, 255, 0);
 		}
+	`;
+
+	export const PortIcon = styled.svg`
+		width: 100%;
+		height: 100%;
 	`;
 }
 
@@ -69,14 +79,29 @@ export class DefaultPortLabel extends React.Component<DefaultPortLabelProps, Def
 		this.props.port.setLabel(newName);
 	};
 
+	renderPortIcon = (icon: string, color: string) => {
+		switch (icon) {
+			case 'triangle':
+				return <Triangle color={color} />;
+			case 'rhombus':
+				return <Rhombus color={color} />;
+			case 'round':
+				return <Round color={color} />;
+			default:
+				return null;
+		}
+	};
+
 	render() {
 		const port = (
-			<PortWidget engine={this.props.engine} port={this.props.port}>
-				<S.Port>{this.props.port.getOptions().icon ?? null}</S.Port>
+			<PortWidget engine={this.props.engine} port={this.props.port} style={{ zIndex: 3 }}>
+				<S.Port isIn={this.props.port.getOptions().in}>
+					{this.renderPortIcon(this.props.port.getOptions().icon, this.props.port.getOptions().icon_color)}
+				</S.Port>
 			</PortWidget>
 		);
 		const label = (
-			<S.Label isIn={this.props.port.getOptions().in}>
+			<S.Label>
 				<input
 					type="text"
 					value={this.props.port.getOptions().label}
