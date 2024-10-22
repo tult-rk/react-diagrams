@@ -7,13 +7,13 @@ import {
 } from '@fjdr/react-diagrams-core';
 import { DefaultLinkModel } from '../link/DefaultLinkModel';
 import { AbstractModelFactory, DeserializeEvent } from '@fjdr/react-canvas-core';
-import { ReactNode } from 'react';
 
 export interface DefaultPortModelOptions extends PortModelOptions {
 	label?: string;
-	icon?: ReactNode;
+	icon?: string;
 	in?: boolean;
 	type?: string;
+	icon_color?: string;
 }
 
 export interface DefaultPortModelGenerics extends PortModelGenerics {
@@ -21,15 +21,22 @@ export interface DefaultPortModelGenerics extends PortModelGenerics {
 }
 
 export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
-	constructor(isIn: boolean, name?: string, label?: string, icon?: ReactNode);
+	constructor(isIn: boolean, name?: string, label?: string, icon?: string, icon_color?: string);
 	constructor(options: DefaultPortModelOptions);
-	constructor(options: DefaultPortModelOptions | boolean, name?: string, label?: string, icon?: ReactNode) {
-		if (!!name) {
+	constructor(
+		options: DefaultPortModelOptions | boolean,
+		name?: string,
+		label?: string,
+		icon?: string,
+		icon_color?: string
+	) {
+		if (typeof options === 'boolean') {
 			options = {
-				in: !!options,
+				in: options,
 				name: name,
 				label: label,
-				icon: icon
+				icon: icon || 'round',
+				icon_color: icon_color || '#000000'
 			};
 		}
 		options = options as DefaultPortModelOptions;
@@ -37,6 +44,8 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 			label: options.label || options.name,
 			alignment: options.in ? PortModelAlignment.LEFT : PortModelAlignment.RIGHT,
 			type: 'default',
+			icon: options.icon || 'round',
+			icon_color: options.icon_color || '#000000',
 			...options
 		});
 	}
@@ -45,13 +54,17 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 		super.deserialize(event);
 		this.options.in = event.data.in;
 		this.options.label = event.data.label;
+		this.options.icon = event.data.icon;
+		this.options.icon_color = event.data.icon_color;
 	}
 
 	serialize() {
 		return {
 			...super.serialize(),
 			in: this.options.in,
-			label: this.options.label
+			label: this.options.label,
+			icon: this.options.icon || 'round',
+			icon_color: this.options.icon_color || '#000000'
 		};
 	}
 
@@ -74,6 +87,7 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 				links.forEach((link) => {
 					const targetPort = link.getTargetPort();
 					const sourcePort = link.getSourcePort();
+					// check if the port is already linked to the target port
 					if (
 						(targetPort?.getID() === port?.getID() && sourcePort?.getID() === this?.getID()) ||
 						(sourcePort?.getID() === port?.getID() && targetPort?.getID() === this?.getID())
@@ -86,6 +100,12 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 				});
 			}
 		}
+
+		// if (canConnect) {
+		// 	canConnect =
+		// 		this.getOptions().icon === port.getOptions().icon &&
+		// 		this.getOptions().icon_color === port.getOptions().icon_color;
+		// }
 
 		return canConnect;
 	}

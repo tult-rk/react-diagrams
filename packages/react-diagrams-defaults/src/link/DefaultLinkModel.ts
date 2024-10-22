@@ -4,6 +4,7 @@ import {
 	LinkModel,
 	LinkModelGenerics,
 	LinkModelListener,
+	PointModel,
 	PortModel,
 	PortModelAlignment
 } from '@fjdr/react-diagrams-core';
@@ -36,11 +37,13 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 		super({
 			type: 'default',
 			width: options.width || 3,
-			color: options.color || 'gray',
+			color: options.color || 'black',
 			selectedColor: options.selectedColor || 'rgb(0,192,255)',
 			curvyness: 50,
 			...options
 		});
+		this.options.color =
+			this.targetPort?.getOptions().icon_color || this.sourcePort?.getOptions().icon_color || options.color || 'black';
 	}
 
 	calculateControlOffset(port: PortModel): [number, number] {
@@ -55,20 +58,36 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 	}
 
 	getSVGPath(): string {
-		if (this.points.length == 2) {
+		if (this.points.length === 2) {
 			const curve = new BezierCurve();
-			curve.setSource(this.getFirstPoint().getPosition());
-			curve.setTarget(this.getLastPoint().getPosition());
-			curve.setSourceControl(this.getFirstPoint().getPosition().clone());
-			curve.setTargetControl(this.getLastPoint().getPosition().clone());
+			const padding = 0; // Khoảng cách 2px, có thể điều chỉnh từ 1 đến 2
+
+			let sourcePosition = this.getFirstPoint().getPosition().clone();
+			let targetPosition = this.getLastPoint().getPosition().clone();
+
+			if (this.sourcePort) {
+				const adjustedSource = this.adjustPositionForPadding(this.getSourcePort(), this.getFirstPoint(), padding);
+				sourcePosition.x = adjustedSource.x;
+				sourcePosition.y = adjustedSource.y;
+			}
+			if (this.targetPort) {
+				const adjustedTarget = this.adjustPositionForPadding(this.getTargetPort(), this.getLastPoint(), padding);
+				targetPosition.x = adjustedTarget.x;
+				targetPosition.y = adjustedTarget.y;
+			}
+
+			curve.setSource(sourcePosition);
+			curve.setTarget(targetPosition);
+			curve.setSourceControl(sourcePosition.clone());
+			curve.setTargetControl(targetPosition.clone());
 
 			if (this.sourcePort) {
 				curve.getSourceControl().translate(...this.calculateControlOffset(this.getSourcePort()));
 			}
-
 			if (this.targetPort) {
 				curve.getTargetControl().translate(...this.calculateControlOffset(this.getTargetPort()));
 			}
+
 			return curve.getSVGCurve();
 		}
 	}
@@ -108,5 +127,25 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 	setColor(color: string) {
 		this.options.color = color;
 		this.fireEvent({ color }, 'colorChanged');
+	}
+
+	adjustPositionForPadding(port: PortModel, point: PointModel, padding: number): { x: number; y: number } {
+		const position = point.getPosition();
+		const alignment = port.getOptions().alignment;
+
+		let x = position.x;
+		let y = position.y;
+
+		if (alignment === PortModelAlignment.RIGHT) {
+			x -= padding;
+		} else if (alignment === PortModelAlignment.LEFT) {
+			x += padding;
+		} else if (alignment === PortModelAlignment.TOP) {
+			y += padding;
+		} else if (alignment === PortModelAlignment.BOTTOM) {
+			y -= padding;
+		}
+
+		return { x, y };
 	}
 }

@@ -6,9 +6,9 @@ import { DefaultPortLabel } from '../port/DefaultPortLabelWidget';
 import styled from '@emotion/styled';
 
 namespace S {
-	export const Node = styled.div<{ background: string; selected: boolean; shape: boolean }>`
+	export const Node = styled.div<{ background: string; selected: boolean; shape: string }>`
 		background-color: ${(p) => p.background};
-		border-radius: ${(p) => (p.shape ? '16px' : 'unset')};
+		border-radius: ${(p) => (p.shape === 'true' ? '16px' : 'unset')};
 		font-family: sans-serif;
 		color: white;
 		border: solid 2px black;
@@ -129,7 +129,7 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 				data-default-node-name={this.props.node.getOptions().name}
 				selected={this.props.node.isSelected()}
 				background={this.props.node.getOptions().color}
-				{...(shape !== undefined && { shape })}
+				shape={shape.toString()}
 			>
 				<S.Title>
 					{this.props.node.getOptions().icon && <S.Icon>{this.props.node.getOptions().icon}</S.Icon>}
