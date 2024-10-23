@@ -66,7 +66,7 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 				this.nodesList.push(node);
 
 				// Cập nhật parent của node
-				node.setParent(this);
+				// node.setParent(this);
 
 				// Di chuyển các link liên quan vào group
 				// this.moveLinksToGroup(node);
@@ -119,37 +119,51 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 	}
 	// TODO: remove node
 
-	adjustSize() {
+	adjustSize = () => {
 		const nodes = this.getNodesList();
 		if (nodes.length === 0) {
 			return;
 		}
 
-		let minX = Infinity;
-		let minY = Infinity;
-		let maxX = -Infinity;
-		let maxY = -Infinity;
+		const rectangles = nodes.map((node) => node.getBoundingBox().getPoints());
 
-		nodes.forEach((node) => {
-			const { x, y } = node.getPosition();
-			const size = node.getSize();
-			const width = size ? size.width : 0;
-			const height = size ? size.height : 0;
-			minX = Math.min(minX, x);
-			minY = Math.min(minY, y);
-			maxX = Math.max(maxX, x + width);
-			maxY = Math.max(maxY, y + height);
-		});
-		console.log(minX, minY, maxX, maxY);
+		const calculateBoundingBox = (rectangles) => {
+			let minX = Infinity;
+			let minY = Infinity;
+			let maxX = -Infinity;
+			let maxY = -Infinity;
 
-		const padding = 20;
-		const newWidth = Math.max((maxX + minX) / 2 + padding, 100);
-		const newHeight = Math.max((maxY + minY) / 2 + padding, 100);
+			rectangles.forEach((points) => {
+				minX = Math.min(minX, points[0].x, points[2].x);
+				minY = Math.min(minY, points[0].y, points[2].y);
+				maxX = Math.max(maxX, points[0].x, points[2].x);
+				maxY = Math.max(maxY, points[0].y, points[2].y);
+			});
 
-		this.setPosition((minX + maxX) / 2, (minY + maxY) / 2);
+			const width = maxX - minX;
+			const height = maxY - minY;
+
+			return {
+				minX,
+				minY,
+				width,
+				height
+			};
+		};
+
+		const boundingBox = calculateBoundingBox(rectangles);
+
+		const padding = 50;
+		const newWidth = boundingBox.width + 2 * padding;
+		const newHeight = boundingBox.height + 2 * padding;
+
+		const centerX = boundingBox.minX + boundingBox.width / 2;
+		const centerY = boundingBox.minY + boundingBox.height / 2;
+
+		this.setPosition(centerX, centerY);
 		this.setSize({ width: newWidth, height: newHeight });
 		this.fireEvent({ width: newWidth, height: newHeight }, 'sizeChanged');
-	}
+	};
 
 	deserialize(event: DeserializeEvent<this>) {
 		super.deserialize(event);

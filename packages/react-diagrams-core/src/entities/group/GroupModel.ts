@@ -9,7 +9,7 @@ import {
 } from '@fjdr/react-canvas-core';
 import { DiagramModel } from '../../models/DiagramModel';
 import { NodeModel } from '../node/NodeModel';
-import { Point, Rectangle } from '@fjdr/geometry';
+import { boundingBoxFromPolygons, Point, Rectangle } from '@fjdr/geometry';
 import { DiagramEngine } from '../../DiagramEngine';
 
 export interface GroupModelListener extends BaseModelListener {
@@ -50,9 +50,9 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 		}
 
 		//also update the nodes co-ordinates (for make glorious speed)
-		_forEach(this.nodes, (node) => {
-			node.setPosition(node.getX() + this.position.x - old.x, node.getY() + this.position.y - old.y);
-		});
+		// _forEach(this.nodes, (node) => {
+		// 	node.setPosition(node.getX() + this.position.x - old.x, node.getY() + this.position.y - old.y);
+		// });
 	}
 
 	deserialize(event: DeserializeEvent<this>) {
@@ -78,6 +78,10 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 				return node.serialize();
 			})
 		};
+	}
+
+	getBoundingNodesRect() {
+		return boundingBoxFromPolygons(Object.values(this.getNodes()).map((node) => node.getBoundingBox()));
 	}
 
 	getNode(id: string): NodeModel | null {

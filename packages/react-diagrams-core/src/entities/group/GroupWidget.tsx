@@ -11,8 +11,6 @@ export interface GroupProps {
 	children?: any;
 	diagramEngine: DiagramEngine;
 }
-
-const GROUP_PADDING = 20;
 namespace S {
 	export const Group = styled.div`
 		position: absolute;
@@ -57,6 +55,12 @@ export class GroupWidget extends React.Component<GroupProps> {
 		});
 	}
 	render() {
+		const { group } = this.props;
+
+		// Tính toán vị trí góc trên bên trái
+		const topLeftX = group.getPosition().x - group.getSize().width / 2;
+		const topLeftY = group.getPosition().y - group.getSize().height / 2;
+
 		return (
 			<PeformanceWidget model={this.props.group} serialized={this.props.group.serialize()}>
 				{() => {
@@ -64,13 +68,11 @@ export class GroupWidget extends React.Component<GroupProps> {
 						<g
 							className="Group"
 							data-groupid={this.props.group.getID()}
-							transform={`translate(${this.props.group.getPosition().x - GROUP_PADDING / 2}, ${
-								this.props.group.getPosition().y - GROUP_PADDING / 2
-							})`}
+							transform={`translate(${topLeftX}, ${topLeftY})`}
 						>
 							<rect
-								width={this.props.group.getSize().width + GROUP_PADDING}
-								height={this.props.group.getSize().height + GROUP_PADDING}
+								width={this.props.group.getSize().width + 20}
+								height={this.props.group.getSize().height}
 								fill="transparent"
 								fillOpacity={0.1}
 								stroke="transparent"

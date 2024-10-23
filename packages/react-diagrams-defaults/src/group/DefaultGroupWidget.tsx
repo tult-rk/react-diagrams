@@ -17,43 +17,6 @@ interface DefaultGroupState {
 	left: number;
 }
 
-namespace S {
-	export const GroupContainer = styled.div<{ color: string; width: number; height: number; top: number; left: number }>`
-		position: absolute;
-		background-color: ${(props: { color: string }) => props.color || '#ccceff'};
-		border-radius: 5px;
-		font-family: sans-serif;
-		pointer-events: all;
-		border: 1px solid #ccc;
-		width: ${(props: { width: number }) => props.width}px;
-		height: ${(props: { height: number }) => props.height}px;
-		top: ${(props: { top: number }) => props.top}px;
-		left: ${(props: { left: number }) => props.left}px;
-	`;
-
-	export const TitleBar = styled.div`
-		background: rgba(0, 0, 0, 0.3);
-		display: flex;
-		white-space: nowrap;
-		justify-items: center;
-		padding: 5px;
-		border-radius: 5px 5px 0 0;
-	`;
-
-	export const Title = styled.input`
-		background: none;
-		flex-grow: 1;
-		border: none;
-		color: white;
-		outline: none;
-		font-size: 16px;
-	`;
-
-	export const GroupContent = styled.div`
-		padding: 10px;
-	`;
-}
-
 const DefaultGroupWidget = ({ group, engine }) => {
 	const [isEditing, setIsEditing] = React.useState(false);
 	const [groupName, setGroupName] = React.useState(group.getName());
@@ -80,8 +43,8 @@ const DefaultGroupWidget = ({ group, engine }) => {
 			height={height + 25}
 			style={{
 				position: 'absolute',
-				top: y - 25,
-				left: x,
+				top: x,
+				left: y,
 				pointerEvents: 'none'
 			}}
 		>
