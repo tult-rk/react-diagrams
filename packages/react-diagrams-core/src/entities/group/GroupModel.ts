@@ -82,6 +82,13 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 		};
 	}
 
+	remove() {
+		super.remove();
+		_forEach(this.nodes, (node) => {
+			node.remove();
+		});
+	}
+
 	getBoundingNodesRect() {
 		return boundingBoxFromPolygons(Object.values(this.getNodes()).map((node) => node.getBoundingBox()));
 	}
@@ -97,6 +104,7 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 
 	unGroup() {
 		this.nodes = {};
+		this.getParent().removeGroup(this);
 	}
 
 	removeNodeFromGroup(nodeID: string): void {

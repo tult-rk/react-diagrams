@@ -33,9 +33,6 @@ export class GroupWidget extends React.Component<GroupProps> {
 	}
 
 	componentWillUnmount(): void {
-		this.ob.disconnect();
-		this.ob = null;
-
 		this.listener?.deregister();
 		this.listener = null;
 	}

@@ -175,6 +175,26 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 		return <button onClick={handleAddGroup}>Add Group</button>;
 	}
 
+	if (selectedEntities[0] instanceof DefaultGroupModel) {
+		const group = selectedEntities[0];
+		return (
+			<div style={{ color: 'white' }}>
+				<div>Group</div>
+				<div>Name: {group.getOptions().name}</div>
+				<div>Color: {group.getOptions().color}</div>
+				<div>Height: {group.height}</div>
+				<div>Width: {group.width}</div>
+				<div>X: {group.getPosition().x}</div>
+				<div>Y: {group.getPosition().y}</div>
+				<div>List Nodes: {Object.values(group.getNodesList()).map((node) => node.getOptions().name)}</div>
+				<div>
+					<button onClick={() => group.unGroup()}>Ungroup</button>
+					<button onClick={() => group.remove()}>Delete Group</button>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div style={{ color: 'white' }}>
 			<button onClick={onClose}>Close</button>

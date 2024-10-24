@@ -10,6 +10,7 @@ export interface DefaultNodeModelOptions extends BasePositionModelOptions {
 	icon?: ReactNode;
 	shape?: boolean;
 	sub?: string;
+	groupId?: string;
 }
 
 export interface DefaultNodeModelGenerics extends NodeModelGenerics {
@@ -159,5 +160,13 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 			width: this.width,
 			height: this.height
 		};
+	}
+
+	setGroupId(groupId: string | null) {
+		this.options.groupId = groupId;
+	}
+
+	getGroupId(): string | null | undefined {
+		return this.options.groupId;
 	}
 }
