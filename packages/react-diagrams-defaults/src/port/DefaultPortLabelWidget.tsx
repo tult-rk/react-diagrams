@@ -44,11 +44,6 @@ namespace S {
 			background: rgb(192, 255, 0);
 		}
 	`;
-
-	export const PortIcon = styled.svg`
-		width: 100%;
-		height: 100%;
-	`;
 }
 
 interface DefaultPortState {
@@ -94,7 +89,7 @@ export class DefaultPortLabel extends React.Component<DefaultPortLabelProps, Def
 
 	render() {
 		const port = (
-			<PortWidget engine={this.props.engine} port={this.props.port} style={{ zIndex: 3 }}>
+			<PortWidget engine={this.props.engine} port={this.props.port}>
 				<S.Port isIn={this.props.port.getOptions().in}>
 					{this.renderPortIcon(this.props.port.getOptions().icon, this.props.port.getOptions().icon_color)}
 				</S.Port>
