@@ -65,11 +65,7 @@ export class GroupWidget extends React.Component<GroupProps> {
 			<PeformanceWidget model={this.props.group} serialized={this.props.group.serialize()}>
 				{() => {
 					return (
-						<g
-							className="Group"
-							data-groupid={this.props.group.getID()}
-							transform={`translate(${topLeftX}, ${topLeftY})`}
-						>
+						<g data-groupid={this.props.group.getID()} transform={`translate(${topLeftX}, ${topLeftY})`}>
 							<rect
 								width={this.props.group.getSize().width + 20}
 								height={this.props.group.getSize().height}

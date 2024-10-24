@@ -41,6 +41,8 @@ const DefaultGroupWidget = ({ group, engine }) => {
 		<svg
 			width={width}
 			height={height + 25}
+			className="group"
+			data-groupid={group.getID()}
 			style={{
 				position: 'absolute',
 				top: x,
@@ -48,7 +50,7 @@ const DefaultGroupWidget = ({ group, engine }) => {
 				pointerEvents: 'none'
 			}}
 		>
-			<foreignObject x={5} y={0} width={width - 10} height={25}>
+			<foreignObject x={5} y={0} width={width - 10} height={25} style={{ pointerEvents: 'all' }}>
 				{isEditing ? (
 					<input
 						value={groupName}
@@ -69,6 +71,8 @@ const DefaultGroupWidget = ({ group, engine }) => {
 					/>
 				) : (
 					<div
+						className="group-name"
+						data-groupid={group.getID()}
 						onDoubleClick={handleDoubleClick}
 						style={{
 							fontSize: '14px',
@@ -92,8 +96,10 @@ const DefaultGroupWidget = ({ group, engine }) => {
 				fillOpacity={0.1}
 				stroke={group.getColor()}
 				strokeWidth={2}
+				data-groupid={group.getID()}
 				rx={5}
 				ry={5}
+				// style={{ pointerEvents: 'all' }}
 			/>
 		</svg>
 	);

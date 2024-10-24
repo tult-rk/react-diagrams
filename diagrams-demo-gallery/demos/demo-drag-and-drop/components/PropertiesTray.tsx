@@ -169,14 +169,16 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 		model.addGroup(group);
 	};
 
+	console.log('======================', element);
+
 	if (selectedEntities.length > 1) {
 		return <button onClick={handleAddGroup}>Add Group</button>;
 	}
 
 	return (
-		<>
+		<div style={{ color: 'white' }}>
 			<button onClick={onClose}>Close</button>
-			<div style={{ color: 'white' }}>Name: </div>
+			<div>Name: </div>
 
 			<input
 				defaultValue={node?.getOptions().name}
@@ -197,7 +199,8 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 			</div>
 			<div style={{ color: 'white' }}>Height: {element?.entity?.height}</div>
 			<div style={{ color: 'white' }}>Width: {element?.entity?.width}</div>
-
+			<div style={{ color: 'white' }}>X: {element?.entity?.position?.x}</div>
+			<div style={{ color: 'white' }}>Y: {element?.entity?.position?.y}</div>
 			<div style={{ borderBottom: '1px solid white', margin: '10px 0 ' }} />
 
 			<div style={{ color: 'white', marginBottom: 10 }}>
@@ -290,6 +293,6 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 					)}
 				</div>
 			</>
-		</>
+		</div>
 	);
 };

@@ -40,7 +40,7 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 
 	setPosition(point: Point): void;
 	setPosition(x: number, y: number): void;
-	setPosition(x: number | Point, y?: number): void {
+	setPosition(x: number | Point, y?: number, isUpdateNodePosition?: boolean): void {
 		const old = this.position;
 
 		if (x instanceof Point) {
@@ -49,10 +49,12 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 			super.setPosition(x, y);
 		}
 
-		//also update the nodes co-ordinates (for make glorious speed)
-		// _forEach(this.nodes, (node) => {
-		// 	node.setPosition(node.getX() + this.position.x - old.x, node.getY() + this.position.y - old.y);
-		// });
+		if (isUpdateNodePosition) {
+			// also update the nodes co-ordinates (for make glorious speed)
+			_forEach(this.nodes, (node) => {
+				node.setPosition(node.getX() + this.position.x - old.x, node.getY() + this.position.y - old.y);
+			});
+		}
 	}
 
 	deserialize(event: DeserializeEvent<this>) {

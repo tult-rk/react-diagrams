@@ -63,17 +63,22 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		var target = event.target as Element;
 		var diagramModel = this.model;
 
+		var element = Toolkit.closest(target, '.group[data-groupid], rect[data-groupid]');
+		if (element) {
+			console.log('Group found:', element);
+			return diagramModel.getGroup(element.getAttribute('data-groupid'));
+		}
+		//look for a group
+		element = Toolkit.closest(target, '.group-name[data-groupid]');
+		if (element) {
+			console.log('Group name found:', element);
+			return diagramModel.getGroup(element.getAttribute('data-groupid'));
+		}
 		//is it a port
 		var element = Toolkit.closest(target, '.port[data-name]');
 		if (element) {
 			var nodeElement = Toolkit.closest(target, '.node[data-nodeid]') as HTMLElement;
 			return diagramModel.getNode(nodeElement.getAttribute('data-nodeid')).getPort(element.getAttribute('data-name'));
-		}
-
-		//look for a group
-		element = Toolkit.closest(target, '.group[data-groupid]');
-		if (element) {
-			return diagramModel.getGroup(element.getAttribute('data-groupid'));
 		}
 
 		//look for a point
