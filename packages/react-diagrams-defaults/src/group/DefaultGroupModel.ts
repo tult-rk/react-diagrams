@@ -64,20 +64,18 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 			} else {
 				super.addNode(node);
 				this.nodesList.push(node);
-
-				// Cập nhật parent của node
-				// node.setParent(this);
-
-				// Di chuyển các link liên quan vào group
-				// this.moveLinksToGroup(node);
-
-				// Điều chỉnh kích thước của group
-				this.adjustSize();
 			}
 
 			// Thêm node vào group hiện tại
 		}
 		return node;
+	}
+
+	addNodes(nodes: DefaultNodeModel[]) {
+		nodes.forEach((node) => {
+			this.addNode(node);
+		});
+		this.adjustSize();
 	}
 
 	removeNode(node: DefaultNodeModel) {
@@ -86,20 +84,10 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 		this.adjustSize();
 	}
 
-	// private moveLinksToGroup(node: DefaultNodeModel) {
-	// 	const diagram = node.getParentCanvasModel();
-	// 	diagram.getLinks().forEach((link) => {
-	// 		if (
-	// 			(link.getSourcePort().getParent() === node &&
-	// 				this.nodesList.includes(link.getTargetPort().getParent() as DefaultNodeModel)) ||
-	// 			(link.getTargetPort().getParent() === node &&
-	// 				this.nodesList.includes(link.getSourcePort().getParent() as DefaultNodeModel))
-	// 		) {
-	// 			this.addLink(link);
-	// 			diagram?.removeLink(link);
-	// 		}
-	// 	});
-	// }
+	unGroup() {
+		super.unGroup();
+		this.adjustSize();
+	}
 
 	addLink<T extends DefaultLinkModel>(link: T): T {
 		if (!this.links.includes(link)) {
@@ -119,52 +107,6 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 	}
 	// TODO: remove node
 
-	adjustSize = () => {
-		const nodes = this.getNodesList();
-		if (nodes.length === 0) {
-			return;
-		}
-
-		const rectangles = nodes.map((node) => node.getBoundingBox().getPoints());
-
-		const calculateBoundingBox = (rectangles) => {
-			let minX = Infinity;
-			let minY = Infinity;
-			let maxX = -Infinity;
-			let maxY = -Infinity;
-
-			rectangles.forEach((points) => {
-				minX = Math.min(minX, points[0].x, points[2].x);
-				minY = Math.min(minY, points[0].y, points[2].y);
-				maxX = Math.max(maxX, points[0].x, points[2].x);
-				maxY = Math.max(maxY, points[0].y, points[2].y);
-			});
-
-			const width = maxX - minX;
-			const height = maxY - minY;
-
-			return {
-				minX,
-				minY,
-				width,
-				height
-			};
-		};
-
-		const boundingBox = calculateBoundingBox(rectangles);
-
-		const padding = 50;
-		const newWidth = boundingBox.width + 2 * padding;
-		const newHeight = boundingBox.height + 2 * padding;
-
-		const centerX = boundingBox.minX + boundingBox.width / 2;
-		const centerY = boundingBox.minY + boundingBox.height / 2;
-
-		this.setPosition(centerX, centerY);
-		this.setSize({ width: newWidth, height: newHeight });
-		this.fireEvent({ width: newWidth, height: newHeight }, 'sizeChanged');
-	};
-
 	deserialize(event: DeserializeEvent<this>) {
 		super.deserialize(event);
 		this.options.name = event.data.name;
@@ -172,7 +114,6 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 		this.nodesList = Object.values(event.data.nodes) as DefaultNodeModel[];
 		this.width = event.data.width;
 		this.height = event.data.height;
-		this.adjustSize();
 	}
 
 	serialize(): any {

@@ -30,12 +30,14 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 	// calculated post rendering so routing can be done correctly
 	width: number;
 	height: number;
+	group: string | null;
 
 	constructor(options: G['OPTIONS']) {
 		super(options);
 		this.ports = {};
 		this.width = 0;
 		this.height = 0;
+		this.group = null;
 	}
 
 	getBoundingBox(): Rectangle {

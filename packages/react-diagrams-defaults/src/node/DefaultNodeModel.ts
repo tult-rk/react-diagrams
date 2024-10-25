@@ -10,7 +10,6 @@ export interface DefaultNodeModelOptions extends BasePositionModelOptions {
 	icon?: ReactNode;
 	shape?: boolean;
 	sub?: string;
-	groupId?: string;
 }
 
 export interface DefaultNodeModelGenerics extends NodeModelGenerics {
@@ -22,6 +21,7 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 	protected portsOut: DefaultPortModel[];
 	protected shape: boolean;
 	protected sub?: string;
+	groupId?: string;
 
 	constructor(name: string, color: string);
 	constructor(options?: DefaultNodeModelOptions);
@@ -163,10 +163,10 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 	}
 
 	setGroupId(groupId: string | null) {
-		this.options.groupId = groupId;
+		this.groupId = groupId;
 	}
 
 	getGroupId(): string | null | undefined {
-		return this.options.groupId;
+		return this.groupId;
 	}
 }

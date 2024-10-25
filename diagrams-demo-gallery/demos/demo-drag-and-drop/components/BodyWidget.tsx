@@ -1,11 +1,12 @@
 import * as React from 'react';
 import _keys from 'lodash/keys';
+import _forEach from 'lodash/forEach';
 import { TrayWidget } from './TrayWidget';
 import { action } from '@storybook/addon-actions';
 import * as beautify from 'json-beautify';
 import { Application, customTypes } from '../Application';
 import { TrayItemWidget } from './TrayItemWidget';
-import { DefaultNodeModel, DefaultPortModel } from '@fjdr/react-diagrams';
+import { DefaultNodeModel, DefaultPortModel, GroupModel } from '@fjdr/react-diagrams';
 import { CanvasWidget } from '@fjdr/react-canvas-core';
 import { DemoCanvasWidget } from '../../helpers/DemoCanvasWidget';
 import styled from '@emotion/styled';
@@ -144,7 +145,13 @@ export class BodyWidget extends React.Component<BodyWidgetProps, State> {
 								node.addOutPort('Out 2');
 							}
 							var point = this.props.app.getDiagramEngine().getRelativeMousePoint(event);
+							const groups = this.props.app.getDiagramEngine().getModel().getGroups();
 							node.setPosition(point);
+							const mouseElement = this.props.app.getDiagramEngine().getMouseElement(event);
+							if (mouseElement instanceof GroupModel) {
+								mouseElement.addNode(node);
+								this.forceUpdate();
+							}
 							this.props.app.getDiagramEngine().getModel().addNode(node);
 							this.forceUpdate();
 						}}

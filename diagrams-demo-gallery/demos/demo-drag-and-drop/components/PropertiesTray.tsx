@@ -161,15 +161,12 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 	};
 
 	const handleAddGroup = () => {
-		console.log('======================', selectedEntities);
 		const group = new DefaultGroupModel();
-		selectedEntities.forEach((entity) => {
-			group.addNode(entity);
-		});
+		const listNodes = selectedEntities.filter((entity) => entity instanceof DefaultNodeModel);
+		group.addNodes(listNodes);
 		model.addGroup(group);
+		engine.repaintCanvas();
 	};
-
-	console.log('======================', element);
 
 	if (selectedEntities.length > 1) {
 		return <button onClick={handleAddGroup}>Add Group</button>;
