@@ -168,6 +168,16 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 		engine.repaintCanvas();
 	};
 
+	const handleUngroup = (group) => {
+		group.unGroup();
+		engine.repaintCanvas();
+	};
+
+	const handleRemoveGroup = (group) => {
+		group.remove();
+		engine.repaintCanvas();
+	};
+
 	if (selectedEntities.length > 1) {
 		return <button onClick={handleAddGroup}>Add Group</button>;
 	}
@@ -185,8 +195,8 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 				<div>Y: {group.getPosition().y}</div>
 				<div>List Nodes: {Object.values(group.getNodesList()).map((node) => node.getOptions().name)}</div>
 				<div>
-					<button onClick={() => group.unGroup()}>Ungroup</button>
-					<button onClick={() => group.remove()}>Delete Group</button>
+					<button onClick={() => handleUngroup(group)}>Ungroup</button>
+					<button onClick={() => handleRemoveGroup(group)}>Delete Group</button>
 				</div>
 			</div>
 		);

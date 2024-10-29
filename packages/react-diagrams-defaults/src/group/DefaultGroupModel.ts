@@ -85,8 +85,12 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 	}
 
 	unGroup() {
+		this.nodesList.forEach((node) => {
+			node.setParent(null);
+			node.group = null;
+		});
+		this.nodesList = [];
 		super.unGroup();
-		this.adjustSize();
 	}
 
 	addLink<T extends DefaultLinkModel>(link: T): T {
