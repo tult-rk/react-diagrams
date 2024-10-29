@@ -178,21 +178,20 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 		this.remove();
 	}
 
+	doClone(lookupTable = {}, clone) {
+		// also clone the nodes
+		clone.nodes = {};
+		_forEach(this.nodes, (node) => {
+			clone.addNode(node.clone(lookupTable));
+		});
+	}
+
 	removeNodeFromGroup(nodeID: string): void {
 		if (this.nodes[nodeID]) {
 			this.nodes[nodeID].setParent(null); // remove parents of node
 			delete this.nodes[nodeID]; // remove from nodes list
 		}
 		this.nodes[nodeID].group = null;
-	}
-
-	group(selectedNodes: NodeModel[], engine: DiagramEngine): void {
-		selectedNodes.forEach((node) => {
-			// check if node is already selected
-			if (!this.nodes[node.getID()]) {
-				this.nodes[node.getID()] = node;
-			}
-		});
 	}
 
 	addNode(node: NodeModel) {

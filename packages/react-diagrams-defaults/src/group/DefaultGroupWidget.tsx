@@ -1,42 +1,15 @@
 import * as React from 'react';
 import { DiagramEngine } from '@fjdr/react-diagrams-core';
 import { DefaultGroupModel } from './DefaultGroupModel';
-import styled from '@emotion/styled';
-import { DefaultNodeWidget } from '../node/DefaultNodeWidget';
 
 interface DefaultGroupProps {
 	group: DefaultGroupModel;
 	engine: DiagramEngine;
 }
 
-interface DefaultGroupState {
-	groupName: string;
-	width: number;
-	height: number;
-	top: number;
-	left: number;
-}
-
 const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 	const [isEditing, setIsEditing] = React.useState(false);
 	const [groupName, setGroupName] = React.useState(group.getName());
-
-	// React.useEffect(() => {
-	// 	const listener = {
-	// 		selectionChanged: () => {
-	// 			// Force re-render when selection changes
-	// 			forceUpdate();
-	// 		}
-	// 	};
-	// 	group.registerListener(listener);
-	// 	return () => {
-	// 		group.deregisterListener(listener);
-	// 	};
-	// }, [group]);
-
-	// const forceUpdate = React.useCallback(() => {
-	// 	setGroupName(group.getName()); // This will trigger a re-render
-	// }, [group]);
 
 	const handleDoubleClick = () => {
 		setIsEditing(true);
@@ -55,14 +28,18 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 	const { x, y } = group.getPosition();
 
 	const handleResize = (direction: string) => (event: React.MouseEvent) => {
-		// Implement resize logic here
 		console.log(`Resizing ${direction}`);
 	};
 
-	const padding = 10; // Tăng padding lên để có thêm không gian
-	const headerHeight = 25; // Chiều cao của phần tiêu đề
+	const padding = 10;
+	const headerHeight = 25;
 	const outerWidth = width + padding * 2;
 	const outerHeight = height + padding * 2 + headerHeight;
+
+	const rectX = padding;
+	const rectY = padding + headerHeight;
+	const rectWidth = width;
+	const rectHeight = height;
 
 	return (
 		<svg
@@ -115,12 +92,12 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 				)}
 			</foreignObject>
 			<rect
-				x={padding}
-				y={padding + headerHeight}
-				width={width}
-				height={height}
+				x={rectX}
+				y={rectY}
+				width={rectWidth}
+				height={rectHeight}
 				fill={group.getColor()}
-				fillOpacity={0.1}
+				fillOpacity={0.05}
 				stroke={group.getColor()}
 				strokeWidth={2}
 				data-groupid={group.getID()}
@@ -130,44 +107,43 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 			{group.isSelected() && (
 				<>
 					<rect
-						x={0}
-						y={0}
-						width={outerWidth}
-						height={outerHeight}
+						x={rectX - 2}
+						y={rectY - 2}
+						width={rectWidth + 4}
+						height={rectHeight + 4}
 						fill="none"
-						stroke={group.getColor()}
-						strokeWidth={1}
-						strokeDasharray="5,5"
+						stroke="#FFA500"
+						strokeWidth={2}
 					/>
 					<circle
-						cx={0}
-						cy={0}
+						cx={rectX}
+						cy={rectY}
 						r={5}
-						fill={group.getColor()}
+						fill={'#FFA500'}
 						onMouseDown={handleResize('nw')}
 						style={{ cursor: 'nwse-resize', pointerEvents: 'all' }}
 					/>
 					<circle
-						cx={outerWidth}
-						cy={0}
+						cx={rectX + rectWidth}
+						cy={rectY}
 						r={5}
-						fill={group.getColor()}
+						fill={'#FFA500'}
 						onMouseDown={handleResize('ne')}
 						style={{ cursor: 'nesw-resize', pointerEvents: 'all' }}
 					/>
 					<circle
-						cx={0}
-						cy={outerHeight}
+						cx={rectX}
+						cy={rectY + rectHeight}
 						r={5}
-						fill={group.getColor()}
+						fill={'#FFA500'}
 						onMouseDown={handleResize('sw')}
 						style={{ cursor: 'nesw-resize', pointerEvents: 'all' }}
 					/>
 					<circle
-						cx={outerWidth}
-						cy={outerHeight}
+						cx={rectX + rectWidth}
+						cy={rectY + rectHeight}
 						r={5}
-						fill={group.getColor()}
+						fill={'#FFA500'}
 						onMouseDown={handleResize('se')}
 						style={{ cursor: 'nwse-resize', pointerEvents: 'all' }}
 					/>
