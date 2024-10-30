@@ -54,11 +54,9 @@ export class MoveItemsState<E extends CanvasEngine = CanvasEngine> extends Abstr
 						item: item
 					};
 				}
-				console.log('======================item', item);
-				console.log('======================group', 'group' in item && item.group ? item?.group : null);
+
 				if ('group' in item && item.group) {
 					const group = (model as any).getGroup(item.group);
-					console.log('======================', group);
 					if (group) {
 						group.adjustSize();
 					}

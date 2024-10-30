@@ -92,4 +92,20 @@ export class Rectangle extends Polygon {
 	getBottomLeft(): Point {
 		return this.points[3];
 	}
+
+	getLeft(): number {
+		return Math.min(this.getTopLeft().x, this.getBottomLeft().x);
+	}
+
+	getRight(): number {
+		return Math.max(this.getTopRight().x, this.getBottomRight().x);
+	}
+
+	getTop(): number {
+		return Math.min(this.getTopLeft().y, this.getTopRight().y);
+	}
+
+	getBottom(): number {
+		return Math.max(this.getBottomLeft().y, this.getBottomRight().y);
+	}
 }
