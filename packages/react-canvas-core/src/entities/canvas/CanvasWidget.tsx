@@ -75,6 +75,15 @@ export class CanvasWidget extends React.Component<DiagramProps> {
 		const engine = this.props.engine;
 		const model = engine.getModel();
 
+		const orderedLayers = model.getLayers().sort((a, b) => {
+			const order = {
+				'diagram-groups': 1,
+				'diagram-links': 2,
+				'diagram-nodes': 3
+			};
+			return order[a.getType()] - order[b.getType()];
+		});
+
 		return (
 			<S.Canvas
 				className={this.props.className}
@@ -101,7 +110,7 @@ export class CanvasWidget extends React.Component<DiagramProps> {
 					this.props.engine.getActionEventBus().fireAction({ event });
 				}}
 			>
-				{model.getLayers().map((layer) => {
+				{orderedLayers.map((layer) => {
 					return (
 						<TransformLayerWidget layer={layer} key={layer.getID()}>
 							<SmartLayerWidget layer={layer} engine={this.props.engine} key={layer.getID()} />

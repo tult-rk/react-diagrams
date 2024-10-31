@@ -11,20 +11,17 @@ namespace S {
 		border-radius: ${(p) => (p.shape === 'true' ? '16px' : 'unset')};
 		font-family: sans-serif;
 		color: white;
-		border: solid 2px black;
 		overflow: visible;
 		font-size: 14px;
 		line-height: 20px;
 		padding: 10px;
 		width: 203px;
-		border: solid 2px ${(p) => (p.selected ? 'rgb(0,192,255)' : 'black')};
 	`;
 
 	export const Title = styled.div`
 		display: flex;
 		white-space: nowrap;
 		justify-items: center;
-		align-items: center;
 	`;
 	export const Icon = styled.div`
 		padding: 8px;
@@ -39,8 +36,10 @@ namespace S {
 			background-color: ${(p) => p.background};
 			border: none;
 			outline: none;
-			padding: 0 5px;
+			padding-left: 5px;
 			color: white;
+			cursor: text;
+			text-overflow: ellipsis;
 		}
 	`;
 
@@ -69,6 +68,128 @@ namespace S {
 
 		&:only-child {
 			margin-right: 0px;
+		}
+	`;
+
+	export const InputWrapper = styled.div`
+		position: relative;
+
+		&:before {
+			content: attr(data-tooltip);
+			position: absolute;
+			bottom: 100%;
+			left: 0;
+			padding: 5px 10px;
+			background: rgba(0, 0, 0, 0.8);
+			color: white;
+			border-radius: 4px;
+			font-size: 12px;
+			max-width: 178px;
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.2s;
+			pointer-events: none;
+			z-index: 1000;
+			margin-bottom: 5px;
+			max-width: 300px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+			line-height: 1.4;
+			max-height: calc(1.4em * 3);
+			word-break: break-word;
+		}
+
+		&:hover:before {
+			opacity: 1;
+			visibility: visible;
+			transition-delay: 2s;
+		}
+	`;
+
+	export const SelectionBox = styled.div`
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		pointer-events: none;
+
+		// Border trên
+		.border-top {
+			position: absolute;
+			top: -4px;
+			left: -2px;
+			right: -2px;
+			height: 1px;
+			background: #ff5722;
+		}
+
+		// Border phải
+		.border-right {
+			position: absolute;
+			top: -2px;
+			right: -4px;
+			bottom: -2px;
+			width: 1px;
+			background: #ff5722;
+		}
+
+		// Border dưới
+		.border-bottom {
+			position: absolute;
+			bottom: -4px;
+			left: -2px;
+			right: -2px;
+			height: 1px;
+			background: #ff5722;
+		}
+
+		// Border trái
+		.border-left {
+			position: absolute;
+			top: -2px;
+			left: -4px;
+			bottom: -2px;
+			width: 1px;
+			background: #ff5722;
+		}
+
+		// Style cho 4 điểm góc
+		.corner {
+			position: absolute;
+			width: 4px;
+			height: 4px;
+			background: transparent;
+			border: 1px solid #ff5722;
+			border-radius: 50%;
+
+			&.top-left {
+				top: -4px;
+				left: -4px;
+				transform: translate(-50%, -50%);
+			}
+
+			&.top-right {
+				top: -4px;
+				right: -4px;
+				transform: translate(50%, -50%);
+			}
+
+			&.bottom-left {
+				bottom: -4px;
+				left: -4px;
+				transform: translate(-50%, 50%);
+			}
+
+			&.bottom-right {
+				bottom: -4px;
+				right: -4px;
+				transform: translate(50%, 50%);
+			}
 		}
 	`;
 }
@@ -118,6 +239,7 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 	};
 
 	generatePort = (port: any): JSX.Element => {
+		// TODO: fix to port available
 		return <DefaultPortLabel engine={this.props.engine} port={port} key={port.getID()} />;
 	};
 
@@ -131,26 +253,38 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 				background={this.props.node.getOptions().color}
 				shape={shape.toString()}
 			>
+				<div className="border-bottom" />
+				<div className="border-left" />
+				<div className="corner top-left" />
+				<div className="corner top-right" />
+				<div className="corner bottom-left" />
+				<div className="corner bottom-right" />
 				<S.Title>
 					{this.props.node.getOptions().icon && <S.Icon>{this.props.node.getOptions().icon}</S.Icon>}
 					<S.TitleWrapper background={this.props.node.getOptions().color}>
 						<S.TitleName>
-							<input
-								type="text"
-								value={this.props.node.getOptions().name}
-								onChange={this.handleNameChange}
-								onFocus={() => this.props.engine.getModel().setEdited(true)}
-								onBlur={() => this.props.engine.getModel().setEdited(false)}
-							/>
+							<S.InputWrapper data-tooltip={this.props.node.getOptions().name}>
+								<input
+									type="text"
+									value={this.props.node.getOptions().name}
+									onChange={this.handleNameChange}
+									onFocus={() => this.props.engine.getModel().setEdited(true)}
+									onBlur={() => this.props.engine.getModel().setEdited(false)}
+									readOnly
+								/>
+							</S.InputWrapper>
 						</S.TitleName>
 						<div>
-							<input
-								type="text"
-								value={this.props.node.getOptions().sub}
-								onChange={this.handleChangeSub}
-								onFocus={() => this.props.engine.getModel().setEdited(true)}
-								onBlur={() => this.props.engine.getModel().setEdited(false)}
-							/>
+							<S.InputWrapper data-tooltip={this.props.node.getOptions().sub}>
+								<input
+									type="text"
+									value={this.props.node.getOptions().sub}
+									onChange={this.handleChangeSub}
+									onFocus={() => this.props.engine.getModel().setEdited(true)}
+									onBlur={() => this.props.engine.getModel().setEdited(false)}
+									readOnly
+								/>
+							</S.InputWrapper>
 						</div>
 					</S.TitleWrapper>
 				</S.Title>
@@ -158,6 +292,18 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 					<S.PortsContainer isIn={true}>{_map(this.props.node.getInPorts(), this.generatePort)}</S.PortsContainer>
 					<S.PortsContainer isIn={false}>{_map(this.props.node.getOutPorts(), this.generatePort)}</S.PortsContainer>
 				</S.Ports>
+				{this.props.node.isSelected() && (
+					<S.SelectionBox>
+						<div className="border-top" />
+						<div className="border-right" />
+						<div className="border-bottom" />
+						<div className="border-left" />
+						<div className="corner top-left" />
+						<div className="corner top-right" />
+						<div className="corner bottom-left" />
+						<div className="corner bottom-right" />
+					</S.SelectionBox>
+				)}
 			</S.Node>
 		);
 	}

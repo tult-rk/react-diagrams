@@ -1,7 +1,7 @@
 import * as SRD from '@fjdr/react-diagrams';
-import { DefaultNodeModel, DefaultPortModel } from '@fjdr/react-diagrams-defaults';
+import { DefaultGroupModel, DefaultNodeModel, DefaultPortModel } from '@fjdr/react-diagrams-defaults';
 import { randomUUID } from 'crypto';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
 	engine: SRD.DiagramEngine;
@@ -26,6 +26,30 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 	const [portsIn, setPortsIn] = useState<DefaultPortModel[]>(null);
 	const [portsOut, setPortsOut] = useState<DefaultPortModel[]>(null);
 	const [isShape, setIsShape] = useState<boolean>(true);
+
+	const [selectedEntities, setSelectedEntities] = useState<any>([]);
+	// TODO: Dùng redux để quản lý selected node
+
+	const previousSelectedRef = useRef<any>([]);
+
+	const areEntitiesEqual = (prev: any[], current: any[]) => {
+		if (prev.length !== current.length) return false;
+		return prev.every((entity, index) => entity.getID() === current[index].getID());
+	};
+
+	const updateSelectedEntities = useCallback(() => {
+		const currentSelected = engine.getModel().getSelectedEntities() as SRD.BaseModel<any>[];
+		if (!areEntitiesEqual(previousSelectedRef.current, currentSelected)) {
+			setSelectedEntities(currentSelected);
+			previousSelectedRef.current = currentSelected;
+			console.log('Selected entities updated:', currentSelected);
+		}
+	}, [engine]);
+
+	useEffect(() => {
+		const interval = setInterval(updateSelectedEntities, 100);
+		return () => clearInterval(interval);
+	}, [updateSelectedEntities]);
 
 	useEffect(() => {
 		if (!engine) {
@@ -136,10 +160,52 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 		engine.repaintCanvas();
 	};
 
+	const handleAddGroup = () => {
+		const group = new DefaultGroupModel();
+		const listNodes = selectedEntities.filter((entity) => entity instanceof DefaultNodeModel);
+		group.addNodes(listNodes);
+		model.addGroup(group);
+		engine.repaintCanvas();
+	};
+
+	const handleUngroup = (group) => {
+		group.unGroup();
+		engine.repaintCanvas();
+	};
+
+	const handleRemoveGroup = (group) => {
+		group.remove();
+		engine.repaintCanvas();
+	};
+
+	if (selectedEntities.length > 1) {
+		return <button onClick={handleAddGroup}>Add Group</button>;
+	}
+
+	if (selectedEntities[0] instanceof DefaultGroupModel) {
+		const group = selectedEntities[0];
+		return (
+			<div style={{ color: 'white' }}>
+				<div>Group</div>
+				<div>Name: {group.getOptions().name}</div>
+				<div>Color: {group.getOptions().color}</div>
+				<div>Height: {group.height}</div>
+				<div>Width: {group.width}</div>
+				<div>X: {group.getPosition().x}</div>
+				<div>Y: {group.getPosition().y}</div>
+				<div>List Nodes: {Object.values(group.getNodesList()).map((node) => node.getOptions().name)}</div>
+				<div>
+					<button onClick={() => handleUngroup(group)}>Ungroup</button>
+					<button onClick={() => handleRemoveGroup(group)}>Delete Group</button>
+				</div>
+			</div>
+		);
+	}
+
 	return (
-		<>
+		<div style={{ color: 'white' }}>
 			<button onClick={onClose}>Close</button>
-			<div style={{ color: 'white' }}>Name: </div>
+			<div>Name: </div>
 
 			<input
 				defaultValue={node?.getOptions().name}
@@ -160,7 +226,8 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 			</div>
 			<div style={{ color: 'white' }}>Height: {element?.entity?.height}</div>
 			<div style={{ color: 'white' }}>Width: {element?.entity?.width}</div>
-
+			<div style={{ color: 'white' }}>X: {element?.entity?.position?.x}</div>
+			<div style={{ color: 'white' }}>Y: {element?.entity?.position?.y}</div>
 			<div style={{ borderBottom: '1px solid white', margin: '10px 0 ' }} />
 
 			<div style={{ color: 'white', marginBottom: 10 }}>
@@ -253,6 +320,6 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 					)}
 				</div>
 			</>
-		</>
+		</div>
 	);
 };

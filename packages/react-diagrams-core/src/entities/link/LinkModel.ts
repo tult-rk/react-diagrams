@@ -6,6 +6,7 @@ import _slice from 'lodash/slice';
 import { LabelModel } from '../label/LabelModel';
 import { DiagramEngine } from '../../DiagramEngine';
 import { DiagramModel } from '../../models/DiagramModel';
+import { GroupModel } from '../group/GroupModel';
 import { boundingBoxFromPoints, Point, Rectangle } from '@fjdr/geometry';
 import {
 	BaseEntityEvent,
@@ -24,7 +25,7 @@ export interface LinkModelListener extends BaseModelListener {
 
 export interface LinkModelGenerics extends BaseModelGenerics {
 	LISTENER: LinkModelListener;
-	PARENT: DiagramModel;
+	PARENT: DiagramModel | GroupModel;
 }
 
 export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>

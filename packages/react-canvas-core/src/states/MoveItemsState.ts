@@ -55,6 +55,13 @@ export class MoveItemsState<E extends CanvasEngine = CanvasEngine> extends Abstr
 					};
 				}
 
+				if ('group' in item && item.group) {
+					const group = (model as any).getGroup(item.group);
+					if (group) {
+						group.adjustSize();
+					}
+				}
+
 				const pos = this.initialPositions[item.getID()].point;
 				item.setPosition(
 					model.getGridPosition(pos.x + event.virtualDisplacementX),

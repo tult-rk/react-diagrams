@@ -15,6 +15,7 @@ export class SelectingState<E extends CanvasEngine = CanvasEngine> extends State
 			new Action({
 				type: InputType.MOUSE_DOWN,
 				fire: (event: ActionEvent<MouseEvent>) => {
+					event.event.preventDefault();
 					const element = this.engine.getActionEventBus().getModelForEvent(event);
 
 					// go into a selection box on the canvas state

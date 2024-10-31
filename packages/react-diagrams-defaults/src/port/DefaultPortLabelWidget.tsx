@@ -30,6 +30,7 @@ namespace S {
 			font-size: 14px;
 			color: black;
 			width: 100%;
+			cursor: text;
 		}
 	`;
 
@@ -103,6 +104,7 @@ export class DefaultPortLabel extends React.Component<DefaultPortLabelProps, Def
 					onChange={this.handleNameChange}
 					onFocus={() => this.props.engine.getModel().setEdited(true)}
 					onBlur={() => this.props.engine.getModel().setEdited(false)}
+					readOnly
 				/>
 			</S.Label>
 		);
