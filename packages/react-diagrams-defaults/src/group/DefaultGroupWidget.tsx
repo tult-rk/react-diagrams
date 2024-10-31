@@ -264,8 +264,7 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 							fontFamily: 'sans-serif',
 							fontWeight: 'bold',
 							color: group.getColor(),
-							pointerEvents: 'auto',
-							cursor: 'pointer'
+							pointerEvents: 'auto'
 						}}
 					>
 						{groupName}
@@ -281,20 +280,23 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 				fillOpacity={0.05}
 				stroke={group.getColor()}
 				strokeWidth={2}
-				data-groupid={group.getID()}
+				// data-groupid={group.getID()}
 				rx={5}
 				ry={5}
+				style={{ pointerEvents: 'all' }}
 			/>
 			{group.isSelected() && (
 				<>
 					<rect
 						x={rectX - 2}
 						y={rectY - 2}
+						data-groupid={group.getID()}
 						width={rectWidth + 4}
 						height={rectHeight + 4}
 						fill="none"
 						stroke="#FFA500"
 						strokeWidth={2}
+						style={{ pointerEvents: 'all' }}
 					/>
 					<circle
 						cx={rectX}

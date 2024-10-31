@@ -145,7 +145,6 @@ export class BodyWidget extends React.Component<BodyWidgetProps, State> {
 								node.addOutPort('Out 2');
 							}
 							var point = this.props.app.getDiagramEngine().getRelativeMousePoint(event);
-							const groups = this.props.app.getDiagramEngine().getModel().getGroups();
 							node.setPosition(point);
 							const mouseElement = this.props.app.getDiagramEngine().getMouseElement(event);
 							if (mouseElement instanceof GroupModel) {

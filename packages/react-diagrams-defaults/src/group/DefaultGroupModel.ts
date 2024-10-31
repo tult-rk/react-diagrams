@@ -59,7 +59,7 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 		if (node.getParent() !== this) {
 			// Nếu node đã thuộc về một group khác hoặc diagram, hãy xóa nó khỏi parent cũ
 			const oldParent = node.getParent();
-			if (oldParent instanceof DefaultGroupModel) {
+			if (oldParent instanceof GroupModel) {
 				throw new Error('Can only add nodes to this layer');
 			} else {
 				super.addNode(node);
@@ -72,6 +72,9 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 	}
 
 	addNodes(nodes: DefaultNodeModel[]) {
+		if (nodes.some((node) => node.groupId)) {
+			throw new Error('Had node already has a group');
+		}
 		nodes.forEach((node) => {
 			this.addNode(node);
 		});

@@ -63,10 +63,14 @@ export class DiagramEngine extends CanvasEngine<CanvasEngineListener, DiagramMod
 		var target = event.target as Element;
 		var diagramModel = this.model;
 
-		var element = Toolkit.closest(target, '.group[data-groupid], rect[data-groupid]');
+		var element = Toolkit.closest(target, '[data-groupid], .group');
 		if (element) {
-			console.log('Group found:', element);
-			return diagramModel.getGroup(element.getAttribute('data-groupid'));
+			// Nếu tìm thấy element con, tìm lên parent group gần nhất
+			const groupElement = element.closest('.group');
+			if (groupElement) {
+				const groupId = groupElement.getAttribute('data-groupid');
+				return diagramModel.getGroup(groupId);
+			}
 		}
 		//look for a group
 		element = Toolkit.closest(target, '.group-name[data-groupid]');
