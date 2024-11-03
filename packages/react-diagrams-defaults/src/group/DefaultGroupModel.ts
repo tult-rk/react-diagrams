@@ -83,6 +83,13 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 
 	removeNode(node: DefaultNodeModel) {
 		this.nodesList = this.nodesList.filter((n) => n !== node);
+
+		// Kiểm tra nếu không còn node nào thì xóa group
+		if (this.nodesList.length === 0) {
+			this.remove();
+		} else {
+			this.adjustSize();
+		}
 	}
 
 	unGroup() {
@@ -129,5 +136,12 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 				return node.serialize();
 			})
 		};
+	}
+
+	removeNodeFromGroup(nodeID: string): void {
+		super.removeNodeFromGroup(nodeID);
+
+		// Cập nhật nodesList ở class con
+		this.nodesList = this.nodesList.filter((n) => n.getID() !== nodeID);
 	}
 }

@@ -95,6 +95,14 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 	}
 
 	remove() {
+		// const parent = this.getParent();
+		// console.log('parent', parent);
+		// if (parent) {
+		// 	console.log('parent instanceof GroupModel', parent instanceof GroupModel);
+		// 	if (parent instanceof GroupModel) {
+		// 		parent.removeNodeFromGroup(this.getID());
+		// 	}
+		// }
 		super.remove();
 		_forEach(this.ports, (port) => {
 			_forEach(port.getLinks(), (link) => {

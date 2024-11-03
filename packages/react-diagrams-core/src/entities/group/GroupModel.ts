@@ -105,7 +105,7 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 
 	setPosition(point: Point): void;
 	setPosition(x: number, y: number): void;
-	setPosition(x: number | Point, y?: number, isUpdateNodePosition?: boolean): void {
+	setPosition(x: number | Point, y?: number): void {
 		const old = this.position;
 
 		if (x instanceof Point) {
@@ -114,9 +114,34 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 			super.setPosition(x, y);
 		}
 
-		if (!(old.x === 0 && old.y === 0)) {
+		// Tính offset di chuyển chính xác
+		const offsetX = this.position.x - old.x;
+		const offsetY = this.position.y - old.y;
+
+		// Giữ điều kiện kiểm tra vị trí cũ
+		if (!(old.x === 0 && old.y === 0) && (offsetX !== 0 || offsetY !== 0)) {
 			_forEach(this.nodes, (node) => {
-				node.setPosition(node.getX() + this.position.x - old.x, node.getY() + this.position.y - old.y);
+				// Di chuyển node theo offset
+				node.setPosition(node.getX() + offsetX, node.getY() + offsetY);
+
+				// Lấy tất cả ports của node
+				const ports = Object.values(node.getPorts());
+
+				// Lấy tất cả links từ các ports
+				const links = ports.reduce((acc, port) => {
+					return [...acc, ...Object.values(port.getLinks())];
+				}, []);
+
+				// Cập nhật vị trí các points của mỗi link
+				links.forEach((link) => {
+					const points = link.getPoints();
+
+					// Chỉ di chuyển các point ở giữa theo đúng offset
+					for (let i = 1; i < points.length - 1; i++) {
+						const point = points[i];
+						point.setPosition(point.getX() + offsetX / 2, point.getY() + offsetY / 2);
+					}
+				});
 			});
 		}
 	}
@@ -124,14 +149,23 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 	deserialize(event: DeserializeEvent<this>) {
 		super.deserialize(event);
 
-		//deserialize nodes
+		// Restore position
+		if (event.data.position) {
+			this.setPosition(event.data.position.x, event.data.position.y);
+		}
+
+		// Restore size
+		if (event.data.size) {
+			this.setSize(event.data.size);
+		}
+
+		// Deserialize nodes
 		_forEach(event.data.nodes, (node: any) => {
 			let nodeOb = (event.engine as DiagramEngine).getFactoryForNode(node.type).generateModel({});
 			nodeOb.deserialize({
 				...event,
 				data: node
 			});
-			// the links need these
 			event.registerModel(nodeOb);
 			this.addNode(nodeOb);
 		});
@@ -140,6 +174,11 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 	serialize() {
 		return {
 			...super.serialize(),
+			position: this.position,
+			size: {
+				width: this.width,
+				height: this.height
+			},
 			nodes: _map(this.nodes, (node) => {
 				return node.serialize();
 			})
@@ -190,6 +229,22 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 			delete this.nodes[nodeID]; // remove from nodes list
 		}
 		this.nodes[nodeID].group = null;
+		// const node = this.nodes[nodeID];
+		// if (node) {
+		// 	// Xóa reference từ node đến group
+		// 	node.setParent(null);
+		// 	node.group = null;
+
+		// 	// Xóa node khỏi danh sách nodes của group
+		// 	delete this.nodes[nodeID];
+
+		// 	// Kiểm tra và xóa group nếu rỗng
+		// 	if (Object.keys(this.nodes).length === 0) {
+		// 		this.remove();
+		// 	} else {
+		// 		this.adjustSize();
+		// 	}
+		// }
 	}
 
 	addNode(node: NodeModel) {

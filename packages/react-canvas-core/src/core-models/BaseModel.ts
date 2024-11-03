@@ -107,7 +107,9 @@ export class BaseModel<G extends BaseModelGenerics = BaseModelGenerics> extends 
 				},
 				'selectionChanged'
 			);
-			this.getParentCanvasModel().fireEvent(null, 'selectionChanged');
+			if (this.getParentCanvasModel()) {
+				this.getParentCanvasModel().fireEvent(null, 'selectionChanged');
+			}
 		}
 	}
 
