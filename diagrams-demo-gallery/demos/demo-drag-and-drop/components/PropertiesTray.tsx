@@ -34,16 +34,17 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 
 	useEffect(() => {
 		// Lắng nghe sự kiện từ engine model
+		if (!engine) {
+			return;
+		}
 		let a;
 		const listener = engine.getModel().registerListener({
 			selectionChanged: () => {
 				// Khi có selection change, lấy selected entities
 				const a = engine.getModel().getSelectedEntities();
-				console.log('Selected entities:', a);
-				console.log('======================');
 			}
 		});
-		console.log('======================', a);
+
 		return () => {
 			listener.deregister();
 		};

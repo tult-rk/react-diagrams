@@ -64,7 +64,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 	deserialize(event: DeserializeEvent<this>) {
 		super.deserialize(event);
 
-		//deserialize ports
+		// Restore ports
 		_forEach(event.data.ports, (port: any) => {
 			let portOb = (event.engine as DiagramEngine).getFactoryForPort(port.type).generateModel({});
 			portOb.deserialize({
@@ -75,6 +75,11 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 			event.registerModel(portOb);
 			this.addPort(portOb);
 		});
+
+		// Restore group reference
+		if (event.data.group) {
+			this.group = event.data.group;
+		}
 	}
 
 	serialize() {
@@ -82,7 +87,8 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 			...super.serialize(),
 			ports: _map(this.ports, (port) => {
 				return port.serialize();
-			})
+			}),
+			group: this.group
 		};
 	}
 
@@ -95,14 +101,6 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 	}
 
 	remove() {
-		// const parent = this.getParent();
-		// console.log('parent', parent);
-		// if (parent) {
-		// 	console.log('parent instanceof GroupModel', parent instanceof GroupModel);
-		// 	if (parent instanceof GroupModel) {
-		// 		parent.removeNodeFromGroup(this.getID());
-		// 	}
-		// }
 		super.remove();
 		_forEach(this.ports, (port) => {
 			_forEach(port.getLinks(), (link) => {
