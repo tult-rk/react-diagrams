@@ -268,22 +268,13 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 									type="text"
 									value={this.props.node.getOptions().name}
 									onChange={this.handleNameChange}
-									onFocus={() => this.props.engine.getModel().setEdited(true)}
-									onBlur={() => this.props.engine.getModel().setEdited(false)}
 									readOnly
 								/>
 							</S.InputWrapper>
 						</S.TitleName>
 						<div>
 							<S.InputWrapper data-tooltip={this.props.node.getOptions().sub}>
-								<input
-									type="text"
-									value={this.props.node.getOptions().sub}
-									onChange={this.handleChangeSub}
-									onFocus={() => this.props.engine.getModel().setEdited(true)}
-									onBlur={() => this.props.engine.getModel().setEdited(false)}
-									readOnly
-								/>
+								<input type="text" value={this.props.node.getOptions().sub} onChange={this.handleChangeSub} readOnly />
 							</S.InputWrapper>
 						</div>
 					</S.TitleWrapper>

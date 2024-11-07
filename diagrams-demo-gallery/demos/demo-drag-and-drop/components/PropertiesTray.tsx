@@ -32,6 +32,23 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 
 	const previousSelectedRef = useRef<any>([]);
 
+	useEffect(() => {
+		// Lắng nghe sự kiện từ engine model
+		let a;
+		const listener = engine.getModel().registerListener({
+			selectionChanged: () => {
+				// Khi có selection change, lấy selected entities
+				const a = engine.getModel().getSelectedEntities();
+				console.log('Selected entities:', a);
+				console.log('======================');
+			}
+		});
+		console.log('======================', a);
+		return () => {
+			listener.deregister();
+		};
+	}, [engine]);
+
 	const areEntitiesEqual = (prev: any[], current: any[]) => {
 		if (prev.length !== current.length) return false;
 		return prev.every((entity, index) => entity.getID() === current[index].getID());
@@ -73,7 +90,11 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 	};
 
 	const handleChangePortName = (element, value) => {
-		element.setLabel(value);
+		const port = element as DefaultPortModel;
+		port.changeOption('icon_color', 'red');
+		port.changeOption('label', value);
+		port.changeOption('icon', 'triangle');
+		port.changeOption('note', '12312312');
 	};
 
 	const handleAddPort = (value, isIn) => {

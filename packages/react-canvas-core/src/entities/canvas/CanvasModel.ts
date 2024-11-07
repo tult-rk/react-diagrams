@@ -38,7 +38,7 @@ export interface CanvasModelGenerics extends BaseEntityGenerics {
 
 export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> extends BaseEntity<G> {
 	protected layers: G['LAYER'][];
-	protected edited;
+	protected edited = false;
 	constructor(options: G['OPTIONS'] = {}) {
 		super({
 			zoom: 100,
@@ -86,7 +86,9 @@ export class CanvasModel<G extends CanvasModelGenerics = CanvasModelGenerics> ex
 	addLayer(layer: LayerModel) {
 		layer.setParent(this);
 		layer.registerListener({
-			entityRemoved: (event: BaseEntityEvent<BaseModel>): void => {}
+			entityRemoved: (event: BaseEntityEvent<BaseModel>): void => {
+				console.log('======================entityRemoved');
+			}
 		});
 		this.layers.push(layer);
 	}

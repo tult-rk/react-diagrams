@@ -98,14 +98,7 @@ export class DefaultPortLabel extends React.Component<DefaultPortLabelProps, Def
 		);
 		const label = (
 			<S.Label>
-				<input
-					type="text"
-					value={this.props.port.getOptions().label}
-					onChange={this.handleNameChange}
-					onFocus={() => this.props.engine.getModel().setEdited(true)}
-					onBlur={() => this.props.engine.getModel().setEdited(false)}
-					readOnly
-				/>
+				<input type="text" value={this.props.port.getOptions().label} onChange={this.handleNameChange} readOnly />
 			</S.Label>
 		);
 

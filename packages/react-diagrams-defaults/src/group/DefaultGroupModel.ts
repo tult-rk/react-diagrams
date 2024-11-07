@@ -83,13 +83,10 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 
 	removeNode(node: DefaultNodeModel) {
 		this.nodesList = this.nodesList.filter((n) => n !== node);
-		node.setParent(null);
-		this.adjustSize();
 	}
 
 	unGroup() {
 		this.nodesList.forEach((node) => {
-			node.setParent(null);
 			node.group = null;
 		});
 		this.nodesList = [];
@@ -99,14 +96,12 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 	addLink<T extends DefaultLinkModel>(link: T): T {
 		if (!this.links.includes(link)) {
 			this.links.push(link);
-			link.setParent(this);
 		}
 		return link;
 	}
 
 	removeLink(link: DefaultLinkModel) {
 		this.links = this.links.filter((l) => l !== link);
-		link.setParent(null);
 	}
 
 	getLinks(): DefaultLinkModel[] {

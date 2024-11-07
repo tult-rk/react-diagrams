@@ -169,7 +169,6 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 	unGroup() {
 		// Remove parent references and group association from nodes
 		_forEach(this.nodes, (node) => {
-			node.setParent(null);
 			node.group = null;
 		});
 
@@ -188,14 +187,12 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 
 	removeNodeFromGroup(nodeID: string): void {
 		if (this.nodes[nodeID]) {
-			this.nodes[nodeID].setParent(null); // remove parents of node
 			delete this.nodes[nodeID]; // remove from nodes list
 		}
 		this.nodes[nodeID].group = null;
 	}
 
 	addNode(node: NodeModel) {
-		node.setParent(this);
 		node.group = this.getID();
 		this.nodes[node.getID()] = node;
 		return node;
