@@ -14,6 +14,7 @@ export interface DefaultPortModelOptions extends PortModelOptions {
 	in?: boolean;
 	type?: string;
 	icon_color?: string;
+	note?: string;
 }
 
 export interface DefaultPortModelGenerics extends PortModelGenerics {
@@ -36,7 +37,8 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 				name: name,
 				label: label,
 				icon: icon || 'round',
-				icon_color: icon_color || '#000000'
+				icon_color: icon_color || '#000000',
+				note: ''
 			};
 		}
 		options = options as DefaultPortModelOptions;
@@ -56,6 +58,7 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 		this.options.label = event.data.label;
 		this.options.icon = event.data.icon;
 		this.options.icon_color = event.data.icon_color;
+		this.options.note = event.data.note;
 	}
 
 	serialize() {
@@ -64,7 +67,8 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 			in: this.options.in,
 			label: this.options.label,
 			icon: this.options.icon || 'round',
-			icon_color: this.options.icon_color || '#000000'
+			icon_color: this.options.icon_color || '#000000',
+			note: this.options.note || ''
 		};
 	}
 
@@ -76,38 +80,29 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 	}
 
 	canLinkToPort(port: PortModel): boolean {
-		const links = Object.values(port.getLinks());
-
-		let canConnect = this.getID() !== port.getID() && this.getParent().getID() !== port.getParent().getID();
-
-		if (canConnect) {
-			if (links.length === 0) {
-				canConnect = true;
-			} else {
-				links.forEach((link) => {
-					const targetPort = link.getTargetPort();
-					const sourcePort = link.getSourcePort();
-					// check if the port is already linked to the target port
-					if (
-						(targetPort?.getID() === port?.getID() && sourcePort?.getID() === this?.getID()) ||
-						(sourcePort?.getID() === port?.getID() && targetPort?.getID() === this?.getID())
-					) {
-						canConnect = false;
-					}
-					if (!targetPort) {
-						canConnect = false;
-					}
-				});
-			}
+		// Không thể link với chính nó
+		if (port === this) {
+			return false;
 		}
 
-		// if (canConnect) {
-		// 	canConnect =
-		// 		this.getOptions().icon === port.getOptions().icon &&
-		// 		this.getOptions().icon_color === port.getOptions().icon_color;
-		// }
+		// Không thể link với port cùng node
+		if (this.getNode() === port.getNode()) {
+			return false;
+		}
 
-		return canConnect;
+		// Kiểm tra xem đã có link giữa 2 port này chưa
+		const existingLinks = Object.values(this.getLinks());
+		const hasExistingLink = existingLinks.some((link) => {
+			const sourcePort = link.getSourcePort();
+			const targetPort = link.getTargetPort();
+			return (sourcePort === this && targetPort === port) || (sourcePort === port && targetPort === this);
+		});
+
+		if (hasExistingLink) {
+			return false;
+		}
+
+		return true;
 	}
 
 	setLabel(value: string): void {
@@ -120,5 +115,37 @@ export class DefaultPortModel extends PortModel<DefaultPortModelGenerics> {
 			return factory.generateModel({});
 		}
 		return link || new DefaultLinkModel();
+	}
+
+	changeOption(key: keyof DefaultPortModelOptions, value: any): void {
+		// Xử lý các trường hợp đặc biệt
+		if (key === 'in') {
+			this.options.alignment = value ? PortModelAlignment.LEFT : PortModelAlignment.RIGHT;
+		}
+
+		// Set giá trị mặc định nếu value là undefined
+		let finalValue = value;
+		switch (key) {
+			case 'icon':
+				finalValue = value || 'round';
+				break;
+			case 'icon_color':
+				finalValue = value || '#000000';
+				break;
+			case 'note':
+				finalValue = value || '';
+				break;
+			default:
+				finalValue = value;
+		}
+
+		// Cập nhật option
+		this.options = {
+			...this.options,
+			[key]: finalValue
+		};
+
+		// Emit event để thông báo có sự thay đổi
+		this.fireEvent({}, 'optionsUpdated');
 	}
 }
