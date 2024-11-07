@@ -113,11 +113,13 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 		this.portsOut = _map(event.data.portsOutOrder, (id) => {
 			return this.getPortFromID(id);
 		}) as DefaultPortModel[];
+		this.group = event.data.group;
 	}
 
 	serialize(): any {
 		return {
 			...super.serialize(),
+			group: this.group,
 			name: this.options.name,
 			color: this.options.color,
 			shape: this.shape,

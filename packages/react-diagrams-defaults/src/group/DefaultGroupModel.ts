@@ -120,9 +120,9 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 		super.deserialize(event);
 		this.options.name = event.data.name;
 		this.options.color = event.data.color;
-		this.nodesList = Object.values(event.data.nodes) as DefaultNodeModel[];
 		this.width = event.data.width;
 		this.height = event.data.height;
+		this.nodesList = Object.values(this.nodes) as DefaultNodeModel[];
 	}
 
 	serialize(): any {
@@ -132,9 +132,7 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 			color: this.options.color,
 			width: this.width,
 			height: this.height,
-			nodes: _map(this.nodesList, (node) => {
-				return node.serialize();
-			})
+			nodeIds: this.nodesList.map((node) => node.getID())
 		};
 	}
 

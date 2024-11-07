@@ -100,6 +100,8 @@ export class BodyWidget extends React.Component<BodyWidgetProps, State> {
 							action('Serialized Graph')(
 								beautify(this.props.app.getDiagramEngine().getModel().serialize(), null, 2, 80)
 							);
+
+							navigator.clipboard.writeText(JSON.stringify(this.props.app.getDiagramEngine().getModel().serialize()));
 						}}
 					>
 						Serialize Graph

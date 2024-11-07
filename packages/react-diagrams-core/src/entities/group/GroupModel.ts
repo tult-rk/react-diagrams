@@ -159,16 +159,18 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 			this.setSize(event.data.size);
 		}
 
-		// Deserialize nodes
-		_forEach(event.data.nodes, (node: any) => {
-			let nodeOb = (event.engine as DiagramEngine).getFactoryForNode(node.type).generateModel({});
-			nodeOb.deserialize({
-				...event,
-				data: node
+		setTimeout(() => {
+			// Lấy diagram model
+			const diagram = event.engine.getModel() as DiagramModel;
+			const nodes = diagram.getNodes();
+
+			// Tìm và add các node thuộc về group này
+			nodes.forEach((node) => {
+				if (node.group === this.getID()) {
+					this.addNode(node);
+				}
 			});
-			event.registerModel(nodeOb);
-			this.addNode(nodeOb);
-		});
+		}, 0);
 	}
 
 	serialize() {
@@ -249,6 +251,7 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 
 	addNode(node: NodeModel) {
 		node.group = this.getID();
+		console.log('==========> addNode', node);
 		this.nodes[node.getID()] = node;
 		return node;
 	}
