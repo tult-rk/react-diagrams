@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {
 	engine: SRD.DiagramEngine;
-	element: any;
 	onClose: () => void;
 }
 
@@ -17,7 +16,7 @@ const colors = [
 	{ name: 'Black', value: 'black' }
 ];
 
-export const PropertiesTray = ({ engine, element, onClose }: Props) => {
+export const PropertiesTray = ({ engine, onClose }: Props) => {
 	const model = engine.getModel();
 	const [node, setNode] = useState<DefaultNodeModel>(null);
 	const [isAddPortIn, setIsAddPortIn] = useState(false);
@@ -42,6 +41,8 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 			selectionChanged: () => {
 				// Khi có selection change, lấy selected entities
 				const a = engine.getModel().getSelectedEntities();
+				console.log('======================selectionChanged', a);
+				setSelectedEntities(a);
 			}
 		});
 
@@ -55,28 +56,14 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 		return prev.every((entity, index) => entity.getID() === current[index].getID());
 	};
 
-	const updateSelectedEntities = useCallback(() => {
-		const currentSelected = engine.getModel().getSelectedEntities() as SRD.BaseModel<any>[];
-		if (!areEntitiesEqual(previousSelectedRef.current, currentSelected)) {
-			setSelectedEntities(currentSelected);
-			previousSelectedRef.current = currentSelected;
-			console.log('Selected entities updated:', currentSelected);
-		}
-	}, [engine]);
-
-	useEffect(() => {
-		const interval = setInterval(updateSelectedEntities, 100);
-		return () => clearInterval(interval);
-	}, [updateSelectedEntities]);
-
 	useEffect(() => {
 		if (!engine) {
 			return;
 		}
-		if (element.entity instanceof DefaultNodeModel) {
-			setNode(element.entity);
+		if (selectedEntities[0] instanceof DefaultNodeModel) {
+			setNode(selectedEntities[0]);
 		}
-	}, [element, model.getEdited()]);
+	}, [selectedEntities, model.getEdited()]);
 
 	useEffect(() => {
 		if (!!node) {
@@ -173,7 +160,7 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 				</>
 			);
 		},
-		[element, node?.getPorts(), model.getEdited()]
+		[selectedEntities, node?.getPorts(), model.getEdited()]
 	);
 
 	const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -192,6 +179,14 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 
 	const handleUngroup = (group) => {
 		group.unGroup();
+		engine.repaintCanvas();
+	};
+
+	const unGroupNode = () => {
+		const group = selectedEntities[0].group;
+		const model = engine.getModel() as SRD.DiagramModel;
+		const gr = model.getGroup(group);
+		gr.removeNodeFromGroup(selectedEntities[0].getID());
 		engine.repaintCanvas();
 	};
 
@@ -246,10 +241,10 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 					style={{ width: 25, height: 25, padding: '0', border: 'none' }}
 				/>
 			</div>
-			<div style={{ color: 'white' }}>Height: {element?.entity?.height}</div>
-			<div style={{ color: 'white' }}>Width: {element?.entity?.width}</div>
-			<div style={{ color: 'white' }}>X: {element?.entity?.position?.x}</div>
-			<div style={{ color: 'white' }}>Y: {element?.entity?.position?.y}</div>
+			<div style={{ color: 'white' }}>Height: {node?.height}</div>
+			<div style={{ color: 'white' }}>Width: {node?.width}</div>
+			<div style={{ color: 'white' }}>X: {node?.getPosition().x}</div>
+			<div style={{ color: 'white' }}>Y: {node?.getPosition().y}</div>
 			<div style={{ borderBottom: '1px solid white', margin: '10px 0 ' }} />
 
 			<div style={{ color: 'white', marginBottom: 10 }}>
@@ -341,6 +336,7 @@ export const PropertiesTray = ({ engine, element, onClose }: Props) => {
 						</>
 					)}
 				</div>
+				<button onClick={unGroupNode}>Un Group</button>
 			</>
 		</div>
 	);

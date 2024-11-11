@@ -21,7 +21,6 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 	protected portsOut: DefaultPortModel[];
 	protected shape: boolean;
 	protected sub?: string;
-	groupId?: string;
 
 	constructor(name: string, color: string);
 	constructor(options?: DefaultNodeModelOptions);
@@ -162,13 +161,5 @@ export class DefaultNodeModel extends NodeModel<DefaultNodeModelGenerics> {
 			width: this.width,
 			height: this.height
 		};
-	}
-
-	setGroupId(groupId: string | null) {
-		this.groupId = groupId;
-	}
-
-	getGroupId(): string | null | undefined {
-		return this.groupId;
 	}
 }

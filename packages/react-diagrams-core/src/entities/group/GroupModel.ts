@@ -227,26 +227,14 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 	}
 
 	removeNodeFromGroup(nodeID: string): void {
+		this.nodes[nodeID].group = null;
 		if (this.nodes[nodeID]) {
 			delete this.nodes[nodeID]; // remove from nodes list
 		}
-		this.nodes[nodeID].group = null;
-		// const node = this.nodes[nodeID];
-		// if (node) {
-		// 	// Xóa reference từ node đến group
-		// 	node.setParent(null);
-		// 	node.group = null;
 
-		// 	// Xóa node khỏi danh sách nodes của group
-		// 	delete this.nodes[nodeID];
-
-		// 	// Kiểm tra và xóa group nếu rỗng
-		// 	if (Object.keys(this.nodes).length === 0) {
-		// 		this.remove();
-		// 	} else {
-		// 		this.adjustSize();
-		// 	}
-		// }
+		if (Object.keys(this.nodes).length < 2) {
+			this.unGroup();
+		}
 	}
 
 	addNode(node: NodeModel) {

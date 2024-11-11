@@ -69,6 +69,7 @@ export class MoveItemsState<E extends CanvasEngine = CanvasEngine> extends Abstr
 				);
 			}
 		}
+		model.fireEvent(items, 'positionChanged');
 		this.engine.repaintCanvas();
 	}
 }

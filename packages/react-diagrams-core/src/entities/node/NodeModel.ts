@@ -101,6 +101,13 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 	}
 
 	remove() {
+		const model = this.getParentCanvasModel() as DiagramModel;
+		if (this.group && model) {
+			const group = model.getGroup(this.group) as GroupModel;
+			if (group) {
+				group.removeNodeFromGroup(this.getID());
+			}
+		}
 		super.remove();
 		_forEach(this.ports, (port) => {
 			_forEach(port.getLinks(), (link) => {
