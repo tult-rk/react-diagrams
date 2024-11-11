@@ -54,37 +54,6 @@ interface State {
 export class BodyWidget extends React.Component<BodyWidgetProps, State> {
 	constructor(props) {
 		super(props);
-		this.state = {
-			selected: null
-		};
-	}
-	componentDidMount() {
-		// Register listener for selection on the model
-		this.props.app
-			.getDiagramEngine()
-			.getModel()
-			.getNodes()
-			.forEach((node) => {
-				node.registerListener({
-					eventDidFire: (event) => {
-						this.setState({ selected: event });
-					}
-				});
-			});
-	}
-	componentDidUpdate() {
-		// Register listener for selection on the model
-		this.props.app
-			.getDiagramEngine()
-			.getModel()
-			.getNodes()
-			.forEach((node) => {
-				node.registerListener({
-					eventDidFire: (event) => {
-						this.setState({ selected: event });
-					}
-				});
-			});
 	}
 	update() {
 		this.forceUpdate();
@@ -165,18 +134,14 @@ export class BodyWidget extends React.Component<BodyWidgetProps, State> {
 						</DemoCanvasWidget>
 					</S.Layer>
 
-					{this.state.selected && (
-						<TrayWidget>
-							<PropertiesTray
-								element={this.state.selected}
-								engine={this.props.app.getDiagramEngine()}
-								onClose={() => {
-									this.props.app.getDiagramEngine().getModel().clearSelection();
-									this.setState({ selected: null });
-								}}
-							/>
-						</TrayWidget>
-					)}
+					<TrayWidget>
+						<PropertiesTray
+							engine={this.props.app.getDiagramEngine()}
+							onClose={() => {
+								this.props.app.getDiagramEngine().getModel().clearSelection();
+							}}
+						/>
+					</TrayWidget>
 				</S.Content>
 			</S.Body>
 		);

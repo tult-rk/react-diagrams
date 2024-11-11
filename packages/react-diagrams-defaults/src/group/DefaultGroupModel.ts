@@ -72,7 +72,7 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 	}
 
 	addNodes(nodes: DefaultNodeModel[]) {
-		if (nodes.some((node) => node.groupId)) {
+		if (nodes.some((node) => node.group)) {
 			throw new Error('Had node already has a group');
 		}
 		nodes.forEach((node) => {
