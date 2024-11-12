@@ -24,6 +24,7 @@ namespace S {
 
 		input {
 			background-color: 'white';
+			font-family: 'Noto Sans', sans-serif;
 			border: none;
 			outline: none;
 			padding: 8px;

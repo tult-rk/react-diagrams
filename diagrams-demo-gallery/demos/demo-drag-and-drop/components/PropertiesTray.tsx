@@ -190,20 +190,59 @@ export const PropertiesTray = ({ engine, onClose }: Props) => {
 		engine.repaintCanvas();
 	};
 
+	const renderAddNodeToGroup = () => {
+		// Kiểm tra có đúng 1 group trong selection
+		const groups = selectedEntities.filter((entity) => entity instanceof DefaultGroupModel);
+		if (groups.length !== 1) return null;
+
+		// Kiểm tra các node được chọn
+		const selectedNodes = selectedEntities.filter((entity) => entity instanceof DefaultNodeModel);
+
+		// Kiểm tra tất cả các node đã chọn phải thuộc về group này
+		const allNodesInGroup = selectedNodes.every((node) => !node.group);
+
+		// Nếu thỏa mãn điều kiện thì hiển thị button
+		if (allNodesInGroup && selectedNodes.length > 0) {
+			return (
+				<button
+					onClick={() =>
+						selectedNodes.forEach((node) => {
+							node.setPosition(groups[0].getPosition());
+							groups[0].addNode(node);
+							engine.repaintCanvas();
+						})
+					}
+				>
+					Add Node to Group
+				</button>
+			);
+		}
+
+		return null;
+	};
 	const handleRemoveGroup = (group) => {
 		group.remove();
 		engine.repaintCanvas();
 	};
 
-	if (selectedEntities.length > 1) {
-		return <button onClick={handleAddGroup}>Add Group</button>;
-	}
+	// if (selectedEntities.length > 1) {
+	// 	return <button onClick={handleAddGroup}>Add Group</button>;
+	// }
 
 	if (selectedEntities[0] instanceof DefaultGroupModel) {
 		const group = selectedEntities[0];
 		return (
 			<div style={{ color: 'white' }}>
-				<div>Group</div>
+				<div>Name: </div>
+
+				<input
+					defaultValue={group?.getOptions().name}
+					onChange={(e) => {
+						group.setName(e.target.value);
+					}}
+					onBlur={onBlur}
+					onFocus={onFocus}
+				/>
 				<div>Name: {group.getOptions().name}</div>
 				<div>Color: {group.getOptions().color}</div>
 				<div>Height: {group.height}</div>
@@ -211,9 +250,44 @@ export const PropertiesTray = ({ engine, onClose }: Props) => {
 				<div>X: {group.getPosition().x}</div>
 				<div>Y: {group.getPosition().y}</div>
 				<div>List Nodes: {Object.values(group.getNodesList()).map((node) => node.getOptions().name)}</div>
+				<div className="property-group">
+					<div className="property-row">
+						<label>Font Size:</label>
+						<select
+							value={selectedEntities[0].getFontSize()}
+							onChange={(e) => {
+								selectedEntities[0].setFontSize(e.target.value);
+								engine.repaintCanvas();
+							}}
+						>
+							<option value="12px">12px</option>
+							<option value="14px">14px</option>
+							<option value="16px">16px</option>
+							<option value="18px">18px</option>
+							<option value="20px">20px</option>
+						</select>
+					</div>
+					<div className="property-row">
+						<label>Font Family:</label>
+						<select
+							value={selectedEntities[0].getFontFamily()}
+							onChange={(e) => {
+								selectedEntities[0].setFontFamily(e.target.value);
+								engine.repaintCanvas();
+							}}
+						>
+							<option value="sans-serif">Sans-serif</option>
+							<option value="Arial">Arial</option>
+							<option value="Helvetica">Helvetica</option>
+							<option value="Times New Roman">Times New Roman</option>
+							<option value="Courier New">Courier New</option>
+						</select>
+					</div>
+				</div>
 				<div>
 					<button onClick={() => handleUngroup(group)}>Ungroup</button>
 					<button onClick={() => handleRemoveGroup(group)}>Delete Group</button>
+					{renderAddNodeToGroup()}
 				</div>
 			</div>
 		);

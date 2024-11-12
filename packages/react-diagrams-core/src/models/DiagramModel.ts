@@ -23,6 +23,7 @@ export interface DiagramListener extends BaseEntityListener {
 	nodesUpdated?(event: BaseEntityEvent & { node: NodeModel; isCreated: boolean }): void;
 	groupsUpdated?(event: BaseEntityEvent & { group: GroupModel; isCreated: boolean }): void;
 	linksUpdated?(event: BaseEntityEvent & { link: LinkModel; isCreated: boolean }): void;
+	linkCreatedByDrag?(event: BaseEntityEvent & { link: LinkModel }): void;
 }
 
 export interface DiagramModelGenerics extends CanvasModelGenerics {

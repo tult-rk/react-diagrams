@@ -70,7 +70,15 @@ export class DragNewLinkState<E extends DiagramEngine = DiagramEngine> extends A
 						if (this.port.canLinkToPort(model)) {
 							this.link.setTargetPort(model);
 							model.reportPosition();
+							this.engine.getModel().fireEvent(
+								{
+									link: this.link
+								},
+								'linkCreatedByDrag'
+							);
+
 							this.engine.repaintCanvas();
+
 							return;
 						} else {
 							this.link.remove();
