@@ -13,7 +13,7 @@ namespace S {
 		color: white;
 		font-size: 12px;
 		padding: 4px 8px;
-		font-family: sans-serif;
+		font-family: 'Noto Sans', sans-serif;
 		user-select: none;
 	`;
 }

@@ -12,17 +12,71 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 	const [isEditing, setIsEditing] = React.useState(false);
 	const [groupName, setGroupName] = React.useState(group.getName());
 
+	React.useEffect(() => {
+		setGroupName(group.getName());
+	}, [group.getName()]);
+
 	const handleDoubleClick = () => {
 		setIsEditing(true);
 	};
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setGroupName(event.target.value);
+		const newName = event.target.value;
+		setGroupName(newName);
+		group.setName(newName);
 	};
 
 	const handleBlur = () => {
 		setIsEditing(false);
-		group.setName(groupName);
+	};
+
+	const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === 'Enter') {
+			setIsEditing(false);
+		}
+		if (event.key === 'Escape') {
+			setGroupName(group.getName());
+			setIsEditing(false);
+		}
+	};
+
+	const textStyle: React.CSSProperties = {
+		fontSize: group.getFontSize(),
+		fontFamily: group.getFontFamily(),
+		fontWeight: group.getFontWeight(),
+		color: group.getColor(),
+		pointerEvents: 'auto',
+		cursor: 'pointer'
+	};
+
+	const inputStyle: React.CSSProperties = {
+		...textStyle,
+		background: 'transparent',
+		border: 'none',
+		outline: 'none',
+		width: '100%',
+		pointerEvents: 'auto'
+	};
+
+	const renderGroupName = () => {
+		if (isEditing) {
+			return (
+				<input
+					value={groupName}
+					onChange={handleChange}
+					onBlur={handleBlur}
+					onKeyDown={handleKeyPress}
+					style={inputStyle}
+					autoFocus
+				/>
+			);
+		}
+
+		return (
+			<div className="group-name" data-groupid={group.getID()} onDoubleClick={handleDoubleClick} style={textStyle}>
+				{groupName}
+			</div>
+		);
 	};
 
 	const { width, height } = group.getSize();
@@ -265,40 +319,7 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 			}}
 		>
 			<foreignObject x={padding} y={padding} width={width} height={headerHeight} style={{ pointerEvents: 'all' }}>
-				{isEditing ? (
-					<input
-						value={groupName}
-						onChange={handleChange}
-						onBlur={handleBlur}
-						style={{
-							fontSize: '14px',
-							fontFamily: 'sans-serif',
-							fontWeight: 'bold',
-							color: group.getColor(),
-							background: 'transparent',
-							border: 'none',
-							outline: 'none',
-							width: '100%',
-							pointerEvents: 'auto'
-						}}
-						autoFocus
-					/>
-				) : (
-					<div
-						className="group-name"
-						data-groupid={group.getID()}
-						onDoubleClick={handleDoubleClick}
-						style={{
-							fontSize: '14px',
-							fontFamily: 'sans-serif',
-							fontWeight: 'bold',
-							color: group.getColor(),
-							pointerEvents: 'auto'
-						}}
-					>
-						{groupName}
-					</div>
-				)}
+				{renderGroupName()}
 			</foreignObject>
 			<rect
 				x={rectX}

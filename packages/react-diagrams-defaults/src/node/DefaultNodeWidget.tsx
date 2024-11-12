@@ -9,7 +9,7 @@ namespace S {
 	export const Node = styled.div<{ background: string; selected: boolean; shape: string }>`
 		background-color: ${(p) => p.background};
 		border-radius: ${(p) => (p.shape === 'true' ? '16px' : 'unset')};
-		font-family: sans-serif;
+		font-family: 'Noto Sans', sans-serif;
 		color: white;
 		overflow: visible;
 		font-size: 14px;

@@ -7,6 +7,9 @@ import { DefaultLinkModel } from '../link/DefaultLinkModel';
 export interface DefaultGroupModelOptions extends BasePositionModelOptions {
 	name?: string;
 	color?: string;
+	fontSize?: string;
+	fontFamily?: string;
+	fontWeight?: string;
 }
 
 export interface DefaultGroupModelGenerics extends GroupModelGenerics {
@@ -16,6 +19,9 @@ export interface DefaultGroupModelGenerics extends GroupModelGenerics {
 export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 	protected nodesList: DefaultNodeModel[];
 	protected links: DefaultLinkModel[];
+	protected fontSize: string;
+	protected fontFamily: string;
+	protected fontWeight: string;
 
 	constructor(name: string);
 	constructor(options?: DefaultGroupModelOptions);
@@ -32,6 +38,9 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 			...options
 		});
 		this.nodesList = [];
+		this.fontSize = options.fontSize || '14px';
+		this.fontFamily = options.fontFamily || 'Noto Sans, sans-serif';
+		this.fontWeight = options.fontWeight || 'normal';
 	}
 	getName() {
 		return this.options.name;
@@ -123,6 +132,9 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 		this.width = event.data.width;
 		this.height = event.data.height;
 		this.nodesList = Object.values(this.nodes) as DefaultNodeModel[];
+		this.fontSize = event.data.fontSize || '14px';
+		this.fontFamily = event.data.fontFamily || 'Noto Sans, sans-serif';
+		this.fontWeight = event.data.fontWeight || 'normal';
 	}
 
 	serialize(): any {
@@ -132,7 +144,10 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 			color: this.options.color,
 			width: this.width,
 			height: this.height,
-			nodeIds: this.nodesList.map((node) => node.getID())
+			nodeIds: this.nodesList.map((node) => node.getID()),
+			fontSize: this.fontSize,
+			fontFamily: this.fontFamily,
+			fontWeight: this.fontWeight
 		};
 	}
 
@@ -141,5 +156,32 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 
 		// Cập nhật nodesList ở class con
 		this.nodesList = this.nodesList.filter((n) => n.getID() !== nodeID);
+	}
+
+	getFontSize(): string {
+		return this.fontSize;
+	}
+
+	setFontSize(size: string) {
+		this.fontSize = size;
+		this.fireEvent({}, 'propertyChanged');
+	}
+
+	getFontFamily(): string {
+		return this.fontFamily;
+	}
+
+	setFontFamily(family: string) {
+		this.fontFamily = family;
+		this.fireEvent({}, 'propertyChanged');
+	}
+
+	getFontWeight(): string {
+		return this.fontWeight;
+	}
+
+	setFontWeight(weight: string) {
+		this.fontWeight = weight;
+		this.fireEvent({}, 'propertyChanged');
 	}
 }
