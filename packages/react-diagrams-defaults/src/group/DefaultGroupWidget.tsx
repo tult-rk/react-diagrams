@@ -136,36 +136,55 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 			const deltaX = moveEvent.clientX - startX;
 			const deltaY = moveEvent.clientY - startY;
 
-			// Tính toán kích thước mới
 			let newWidth = startWidth;
 			let newHeight = startHeight;
 			let newX = startPos.x;
 			let newY = startPos.y;
 
+			// Xử lý resize theo hướng
 			switch (direction) {
+				// Xử lý cho các góc
 				case 'se':
 					newWidth = Math.max(minWidth, startWidth + deltaX);
 					newHeight = Math.max(minHeight, startHeight + deltaY);
 					break;
 				case 'sw':
 					newWidth = Math.max(minWidth, startWidth - deltaX);
-					newX = startPos.x + deltaX;
 					newHeight = Math.max(minHeight, startHeight + deltaY);
+					newX = startPos.x + deltaX / 2;
 					break;
 				case 'ne':
 					newWidth = Math.max(minWidth, startWidth + deltaX);
 					newHeight = Math.max(minHeight, startHeight - deltaY);
-					newY = startPos.y + deltaY;
+					newY = startPos.y + deltaY / 2;
 					break;
 				case 'nw':
 					newWidth = Math.max(minWidth, startWidth - deltaX);
-					newX = startPos.x + deltaX;
 					newHeight = Math.max(minHeight, startHeight - deltaY);
-					newY = startPos.y + deltaY;
+					newX = startPos.x + deltaX / 2;
+					newY = startPos.y + deltaY / 2;
+					break;
+
+				// Xử lý cho các điểm giữa cạnh
+				case 'n':
+					newHeight = Math.max(minHeight, startHeight - deltaY * 2);
+					newY = startPos.y - (newHeight - startHeight) / 2;
+					break;
+				case 's':
+					newHeight = Math.max(minHeight, startHeight + deltaY * 2);
+					newY = startPos.y + (newHeight - startHeight) / 2;
+					break;
+				case 'e':
+					newWidth = Math.max(minWidth, startWidth + deltaX * 2);
+					newX = startPos.x + (newWidth - startWidth) / 2;
+					break;
+				case 'w':
+					newWidth = Math.max(minWidth, startWidth - deltaX * 2);
+					newX = startPos.x - (newWidth - startWidth) / 2;
 					break;
 			}
 
-			// Kiểm tra xem kích thước mới có đủ lớn để chứa tất cả các node không
+			// Kiểm tra và áp dụng thay đổi
 			const proposedGroupBounds = {
 				left: newX - newWidth / 2,
 				right: newX + newWidth / 2,
@@ -173,14 +192,12 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 				bottom: newY + newHeight / 2
 			};
 
-			// Thử điều chỉnh vị trí các node với kích thước mới
 			let canResize = true;
 			nodes.forEach((node) => {
 				const nodeBounds = node.getBoundingBox();
 				const nodeWidth = nodeBounds.getRight() - nodeBounds.getLeft();
 				const nodeHeight = nodeBounds.getBottom() - nodeBounds.getTop();
 
-				// Kiểm tra xem node có thể fit vào kích thước mới không
 				if (nodeWidth + PADDING * 2 > newWidth || nodeHeight + PADDING * 2 > newHeight) {
 					canResize = false;
 				}
@@ -221,6 +238,18 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 	const rectY = padding + headerHeight;
 	const rectWidth = width;
 	const rectHeight = height;
+
+	// Constants và styles
+	const RESIZE_HANDLE_SIZE = 10;
+	const RESIZE_HANDLE_HITBOX = 20;
+
+	const resizeHandleStyle: React.CSSProperties = {
+		cursor: 'pointer',
+		pointerEvents: 'all' as const,
+		strokeWidth: 2,
+		stroke: '#FFA500',
+		fill: '#FFA500'
+	};
 
 	return (
 		<svg
@@ -301,34 +330,98 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 					<circle
 						cx={rectX}
 						cy={rectY}
-						r={5}
-						fill={'#FFA500'}
+						r={RESIZE_HANDLE_SIZE / 2}
 						onMouseDown={handleResize('nw')}
-						style={{ cursor: 'nwse-resize', pointerEvents: 'all' }}
+						style={{ ...resizeHandleStyle, cursor: 'nwse-resize' as const }}
 					/>
 					<circle
 						cx={rectX + rectWidth}
 						cy={rectY}
-						r={5}
-						fill={'#FFA500'}
+						r={RESIZE_HANDLE_SIZE / 2}
 						onMouseDown={handleResize('ne')}
-						style={{ cursor: 'nesw-resize', pointerEvents: 'all' }}
+						style={{ ...resizeHandleStyle, cursor: 'nesw-resize' as const }}
 					/>
 					<circle
 						cx={rectX}
 						cy={rectY + rectHeight}
-						r={5}
-						fill={'#FFA500'}
+						r={RESIZE_HANDLE_SIZE / 2}
 						onMouseDown={handleResize('sw')}
-						style={{ cursor: 'nesw-resize', pointerEvents: 'all' }}
+						style={{ ...resizeHandleStyle, cursor: 'nesw-resize' as const }}
 					/>
 					<circle
 						cx={rectX + rectWidth}
 						cy={rectY + rectHeight}
-						r={5}
-						fill={'#FFA500'}
+						r={RESIZE_HANDLE_SIZE / 2}
 						onMouseDown={handleResize('se')}
-						style={{ cursor: 'nwse-resize', pointerEvents: 'all' }}
+						style={{ ...resizeHandleStyle, cursor: 'nwse-resize' as const }}
+					/>
+					<rect
+						x={rectX + rectWidth / 2 - RESIZE_HANDLE_SIZE / 2}
+						y={rectY - RESIZE_HANDLE_SIZE / 2}
+						width={RESIZE_HANDLE_SIZE}
+						height={RESIZE_HANDLE_SIZE}
+						onMouseDown={handleResize('n')}
+						style={{ ...resizeHandleStyle, cursor: 'ns-resize' as const }}
+					/>
+					<rect
+						x={rectX + rectWidth - RESIZE_HANDLE_SIZE / 2}
+						y={rectY + rectHeight / 2 - RESIZE_HANDLE_SIZE / 2}
+						width={RESIZE_HANDLE_SIZE}
+						height={RESIZE_HANDLE_SIZE}
+						onMouseDown={handleResize('e')}
+						style={{ ...resizeHandleStyle, cursor: 'ew-resize' as const }}
+					/>
+					<rect
+						x={rectX + rectWidth / 2 - RESIZE_HANDLE_SIZE / 2}
+						y={rectY + rectHeight - RESIZE_HANDLE_SIZE / 2}
+						width={RESIZE_HANDLE_SIZE}
+						height={RESIZE_HANDLE_SIZE}
+						onMouseDown={handleResize('s')}
+						style={{ ...resizeHandleStyle, cursor: 'ns-resize' as const }}
+					/>
+					<rect
+						x={rectX - RESIZE_HANDLE_SIZE / 2}
+						y={rectY + rectHeight / 2 - RESIZE_HANDLE_SIZE / 2}
+						width={RESIZE_HANDLE_SIZE}
+						height={RESIZE_HANDLE_SIZE}
+						onMouseDown={handleResize('w')}
+						style={{ ...resizeHandleStyle, cursor: 'ew-resize' as const }}
+					/>
+					<rect
+						x={rectX + rectWidth / 2 - RESIZE_HANDLE_HITBOX / 2}
+						y={rectY - RESIZE_HANDLE_HITBOX / 2}
+						width={RESIZE_HANDLE_HITBOX}
+						height={RESIZE_HANDLE_HITBOX}
+						fill="transparent"
+						onMouseDown={handleResize('n')}
+						style={{ cursor: 'ns-resize', pointerEvents: 'all' as const }}
+					/>
+					<rect
+						x={rectX + rectWidth - RESIZE_HANDLE_HITBOX / 2}
+						y={rectY + rectHeight / 2 - RESIZE_HANDLE_HITBOX / 2}
+						width={RESIZE_HANDLE_HITBOX}
+						height={RESIZE_HANDLE_HITBOX}
+						fill="transparent"
+						onMouseDown={handleResize('e')}
+						style={{ cursor: 'ew-resize', pointerEvents: 'all' as const }}
+					/>
+					<rect
+						x={rectX + rectWidth / 2 - RESIZE_HANDLE_HITBOX / 2}
+						y={rectY + rectHeight - RESIZE_HANDLE_HITBOX / 2}
+						width={RESIZE_HANDLE_HITBOX}
+						height={RESIZE_HANDLE_HITBOX}
+						fill="transparent"
+						onMouseDown={handleResize('s')}
+						style={{ cursor: 'ns-resize', pointerEvents: 'all' as const }}
+					/>
+					<rect
+						x={rectX - RESIZE_HANDLE_HITBOX / 2}
+						y={rectY + rectHeight / 2 - RESIZE_HANDLE_HITBOX / 2}
+						width={RESIZE_HANDLE_HITBOX}
+						height={RESIZE_HANDLE_HITBOX}
+						fill="transparent"
+						onMouseDown={handleResize('w')}
+						style={{ cursor: 'ew-resize', pointerEvents: 'all' as const }}
 					/>
 				</>
 			)}

@@ -66,37 +66,54 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 
 		const rectangles = _map(nodes, (node) => node.getBoundingBox().getPoints());
 		const boundingBox = this.calculateBoundingBox(rectangles);
-
 		const padding = 50;
-		const currentPosition = this.getPosition();
+
+		const centerX = boundingBox.minX + boundingBox.width / 2;
+		const centerY = boundingBox.minY + boundingBox.height / 2;
+
 		const currentSize = this.getSize();
 
-		// Tính toán kích thước và vị trí mới
-		const newLeft = Math.min(currentPosition.x - currentSize.width / 2, boundingBox.minX - padding);
-		const newRight = Math.max(
-			currentPosition.x + currentSize.width / 2,
-			boundingBox.minX + boundingBox.width + padding
-		);
-		const newTop = Math.min(currentPosition.y - currentSize.height / 2, boundingBox.minY - padding);
-		const newBottom = Math.max(
-			currentPosition.y + currentSize.height / 2,
-			boundingBox.minY + boundingBox.height + padding
-		);
+		if (currentSize.width === 0 || currentSize.height === 0) {
+			const newWidth = boundingBox.width + padding * 2;
+			const newHeight = boundingBox.height + padding * 2;
 
-		const newWidth = newRight - newLeft;
-		const newHeight = newBottom - newTop;
-		const newCenterX = (newLeft + newRight) / 2;
-		const newCenterY = (newTop + newBottom) / 2;
+			this.setSize({ width: newWidth, height: newHeight });
+			this.setPosition(centerX, centerY);
+		} else {
+			const currentPosition = this.getPosition();
 
-		// Cập nhật vị trí và kích thước
-		this.setPosition(newCenterX, newCenterY);
-		this.setSize({ width: newWidth, height: newHeight });
-		this.fireEvent({ width: newWidth, height: newHeight }, 'sizeChanged');
+			const newLeft = Math.min(currentPosition.x - currentSize.width / 2, boundingBox.minX - padding);
+			const newRight = Math.max(
+				currentPosition.x + currentSize.width / 2,
+				boundingBox.minX + boundingBox.width + padding
+			);
+			const newTop = Math.min(currentPosition.y - currentSize.height / 2, boundingBox.minY - padding);
+			const newBottom = Math.max(
+				currentPosition.y + currentSize.height / 2,
+				boundingBox.minY + boundingBox.height + padding
+			);
+
+			const newWidth = newRight - newLeft;
+			const newHeight = newBottom - newTop;
+			const newCenterX = (newLeft + newRight) / 2;
+			const newCenterY = (newTop + newBottom) / 2;
+
+			this.setPosition(newCenterX, newCenterY);
+			this.setSize({ width: newWidth, height: newHeight });
+		}
+
+		this.fireEvent(
+			{
+				width: this.width,
+				height: this.height
+			},
+			'sizeChanged'
+		);
 	};
 
-	isPointInside = (point: Point): boolean => {
+	isPointInside = (point: { x: number; y: number }): boolean => {
 		const boundingBox = this.getBoundingBox();
-		return boundingBox.containsPoint(point);
+		return boundingBox.containsPoint(new Point(point.x, point.y));
 	};
 
 	getBoundingBox(): Rectangle {
@@ -239,7 +256,6 @@ export class GroupModel<G extends GroupModelGenerics = GroupModelGenerics> exten
 
 	addNode(node: NodeModel) {
 		node.group = this.getID();
-		console.log('==========> addNode', node);
 		this.nodes[node.getID()] = node;
 		return node;
 	}
