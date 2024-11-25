@@ -50,28 +50,19 @@ namespace S {
 
 interface DefaultPortState {
 	portName: string;
-	inputWidth: string;
 }
 export class DefaultPortLabel extends React.Component<DefaultPortLabelProps, DefaultPortState> {
 	constructor(props: DefaultPortLabelProps) {
 		super(props);
 		this.state = {
-			portName: props.port.getOptions().name,
-			inputWidth: this.calculateInputWidth(props.port.getOptions().name)
+			portName: props.port.getOptions().name
 		};
 	}
-
-	calculateInputWidth = (value: string): string => {
-		// Estimate the width of the input based on the length of the text
-		// Adjust the multiplier (e.g., 8) based on your font size and padding
-		return (value.length + 1) * 8 + 'px';
-	};
 
 	handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
 		const newName = event.target.value;
 		this.setState({
-			portName: newName,
-			inputWidth: this.calculateInputWidth(newName)
+			portName: newName
 		});
 		this.props.port.setLabel(newName);
 	};

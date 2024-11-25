@@ -202,7 +202,6 @@ export interface DefaultNodeProps {
 interface DefaultNodeState {
 	nodeName: string;
 	subTitle?: string;
-	inputWidth: string;
 }
 
 export class DefaultNodeWidget extends React.Component<DefaultNodeProps, DefaultNodeState> {
@@ -210,22 +209,14 @@ export class DefaultNodeWidget extends React.Component<DefaultNodeProps, Default
 		super(props);
 		this.state = {
 			nodeName: props.node.getOptions().name,
-			subTitle: props.node.getOptions().sub,
-			inputWidth: this.calculateInputWidth(props.node.getOptions().name)
+			subTitle: props.node.getOptions().sub
 		};
 	}
-
-	calculateInputWidth = (value: string): string => {
-		// Estimate the width of the input based on the length of the text
-		// Adjust the multiplier (e.g., 8) based on your font size and padding
-		return (value.length + 1) * 8 + 'px';
-	};
 
 	handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
 		const newName = event.target.value;
 		this.setState({
-			nodeName: newName,
-			inputWidth: this.calculateInputWidth(newName)
+			nodeName: newName
 		});
 		this.props.node.setName(newName);
 	};
