@@ -314,4 +314,11 @@ export class LinkModel<G extends LinkModelGenerics = LinkModelGenerics>
 			position: new Point(x, y)
 		});
 	}
+
+	removeLabel(label: LabelModel) {
+		const index = this.labels.indexOf(label);
+		if (index !== -1) {
+			this.labels.splice(index, 1);
+		}
+	}
 }

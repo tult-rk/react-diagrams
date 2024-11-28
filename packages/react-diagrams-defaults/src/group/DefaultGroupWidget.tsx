@@ -185,7 +185,7 @@ const DefaultGroupWidget: React.FC<DefaultGroupProps> = ({ group, engine }) => {
 		const { minWidth, minHeight } = calculateMinGroupSize(nodes);
 
 		const handleMouseMove = (moveEvent: MouseEvent) => {
-			if (!isResizing) return;
+			if (!isResizing || group.isLocked()) return;
 
 			const deltaX = moveEvent.clientX - startX;
 			const deltaY = moveEvent.clientY - startY;

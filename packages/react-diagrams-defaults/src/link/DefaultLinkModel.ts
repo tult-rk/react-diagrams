@@ -16,6 +16,7 @@ export interface DefaultLinkModelListener extends LinkModelListener {
 	colorChanged?(event: BaseEntityEvent<DefaultLinkModel> & { color: null | string }): void;
 
 	widthChanged?(event: BaseEntityEvent<DefaultLinkModel> & { width: 0 | number }): void;
+	labelRemoved?(event: BaseEntityEvent<LinkModel> & { label: LabelModel }): void;
 }
 
 export interface DefaultLinkModelOptions extends BaseModelOptions {
@@ -117,6 +118,14 @@ export class DefaultLinkModel extends LinkModel<DefaultLinkModelGenerics> {
 		let labelOb = new DefaultLabelModel();
 		labelOb.setLabel(label);
 		return super.addLabel(labelOb);
+	}
+
+	removeLabel(label: LabelModel) {
+		const index = this.labels.indexOf(label);
+		if (index !== -1) {
+			this.labels.splice(index, 1);
+			this.fireEvent({ label }, 'labelRemoved');
+		}
 	}
 
 	setWidth(width: number) {
