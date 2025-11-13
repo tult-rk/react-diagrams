@@ -94,6 +94,7 @@ export class DefaultGroupModel extends GroupModel<DefaultGroupModelGenerics> {
 		this.nodesList = this.nodesList.filter((n) => n !== node);
 
 		// Kiểm tra nếu không còn node nào thì xóa group
+		alert('removeNode');
 		if (this.nodesList.length === 0) {
 			this.remove();
 		} else {

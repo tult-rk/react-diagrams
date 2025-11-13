@@ -101,6 +101,7 @@ export class NodeModel<G extends NodeModelGenerics = NodeModelGenerics> extends 
 	}
 
 	remove() {
+		alert(1);
 		const model = this.getParentCanvasModel() as DiagramModel;
 		if (this.group && model) {
 			const group = model.getGroup(this.group) as GroupModel;
